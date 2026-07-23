@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getDailyRevenueHistory } from '../api/transactionApi';
+import { getDailyRevenueHistory, getTodayRevenue } from '../api/transactionApi';
 import { formatCurrency } from '../utils/formatCurrency';
 import { useToast } from '../context/ToastContext';
 import {
@@ -13,12 +13,15 @@ import {
   Percent,
   CalendarRange,
   ChevronRight,
-  Info
+  Info,
+  Store,
+  Building2
 } from 'lucide-react';
 
 export default function AnalyticsPage() {
   const [days, setDays] = useState(7);
   const [data, setData] = useState([]);
+  const [warungBreakdown, setWarungBreakdown] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [tablePage, setTablePage] = useState(1);
@@ -28,9 +31,13 @@ export default function AnalyticsPage() {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      const res = await getDailyRevenueHistory({ days });
-      setData(res.data.data);
-      setTablePage(1); // reset ke halaman pertama saat data berubah
+      const [resHistory, resToday] = await Promise.all([
+        getDailyRevenueHistory({ days }),
+        getTodayRevenue(),
+      ]);
+      setData(resHistory.data.data);
+      setWarungBreakdown(resToday.data.data.by_warung || []);
+      setTablePage(1);
     } catch {
       showToast('Gagal memuat data analitik.', 'error');
     } finally {
@@ -189,6 +196,49 @@ export default function AnalyticsPage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 tracking-tight">{formatCurrency(highestDay.revenue)}</h3>
               <p className="text-xs text-gray-400 mt-1.5">{highestDay.date !== '-' ? formatDate(highestDay.date) : '-'}</p>
+            </div>
+          </div>
+
+          {/* Multi-Warung Revenue Breakdown Section */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-950/60 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                  <Store className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-gray-900">Penghasilan Hari Ini Per Warung</h3>
+                  <p className="text-xs text-gray-400 mt-0.5">Rincian omzet harian dari masing-masing outlet / warung</p>
+                </div>
+              </div>
+              <span className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold px-3 py-1 rounded-xl">
+                {warungBreakdown.length} Warung Terdaftar
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {warungBreakdown.map((item, idx) => (
+                <div
+                  key={item.user_id || idx}
+                  className="bg-gray-50/80 rounded-2xl p-4 border border-gray-150 hover:border-emerald-200 transition-all flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-emerald-600 font-bold text-xs shadow-2xs">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-gray-800">{item.warung_name}</span>
+                    </div>
+                    <span className="text-[10px] bg-white border border-gray-200 text-gray-500 font-medium px-2 py-0.5 rounded-full">
+                      {item.tx_count} tx
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-lg font-black text-emerald-700 tracking-tight">{formatCurrency(item.revenue)}</p>
+                    <p className="text-[10px] text-gray-400 mt-0.5 font-medium">Kasir: {item.user_name}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 

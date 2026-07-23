@@ -1,3 +1,4 @@
+import SupervisorOtpWidget from '../ui/SupervisorOtpWidget';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -17,6 +18,7 @@ import {
   TrendingUp,
   Sun,
   Moon,
+  Utensils,
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -105,8 +107,8 @@ export default function Sidebar({ isOpen, onClose }) {
                 Manajemen
               </div>
               <NavLink to="/products" className={linkClass} onClick={onClose}>
-                <Package className="w-5 h-5" />
-                Produk
+                <Utensils className="w-5 h-5" />
+                Menu / Produk
               </NavLink>
               <NavLink to="/users" className={linkClass} onClick={onClose}>
                 <Users className="w-5 h-5" />
@@ -137,7 +139,14 @@ export default function Sidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Theme Toggle + User & Logout */}
-        <div className="p-3 border-t border-gray-100 dark:border-gray-800 space-y-1">
+        <div className="p-3 border-t border-gray-100 dark:border-gray-800 space-y-2">
+          {/* Supervisor OTP for Admin */}
+          {isAdmin && (
+            <div className="px-1">
+              <SupervisorOtpWidget />
+            </div>
+          )}
+
           {/* Dark mode toggle */}
           <button
             onClick={toggleTheme}

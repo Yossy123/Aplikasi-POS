@@ -4,7 +4,7 @@ import { getUsers, createUser, updateUser, deleteUser } from '../api/userApi';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ui/ConfirmModal';
-import { Users, Search, Plus, Edit3, Trash2, X, User, Mail, ShieldAlert, KeyRound } from 'lucide-react';
+import { Users, Search, Plus, Edit3, Trash2, X, User, Mail, ShieldAlert, KeyRound, Store, Building2 } from 'lucide-react';
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState([]);
@@ -12,7 +12,7 @@ export default function UserManagementPage() {
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'kasir' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'kasir', warung_name: '' });
   const [fieldErrors, setFieldErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [saving, setSaving] = useState(false);
@@ -62,14 +62,20 @@ export default function UserManagementPage() {
 
   const openCreate = () => {
     setEditingUser(null);
-    setForm({ name: '', email: '', password: '', role: 'kasir' });
+    setForm({ name: '', email: '', password: '', role: 'kasir', warung_name: '' });
     setFieldErrors({}); setTouched({});
     setShowModal(true);
   };
 
   const openEdit = (userData) => {
     setEditingUser(userData);
-    setForm({ name: userData.name, email: userData.email, password: '', role: userData.role });
+    setForm({
+      name: userData.name,
+      email: userData.email,
+      password: '',
+      role: userData.role,
+      warung_name: userData.warung_name || '',
+    });
     setFieldErrors({}); setTouched({});
     setShowModal(true);
   };
@@ -200,7 +206,15 @@ export default function UserManagementPage() {
                           {item.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.name}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.name}</p>
+                              {item.warung_name && (
+                                <span className="bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                  <Store className="w-2.5 h-2.5" />
+                                  {item.warung_name}
+                                </span>
+                              )}
+                            </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400">{item.email}</p>
                         </div>
                       </div>
@@ -336,6 +350,21 @@ export default function UserManagementPage() {
                     <option value="admin">Administrator</option>
                   </select>
                 </div>
+                {form.role === 'kasir' && (
+                  <div>
+                    <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                      <Store className="w-3.5 h-3.5 text-gray-400" />
+                      Nama Warung / Outlet
+                    </label>
+                    <input
+                      type="text"
+                      value={form.warung_name}
+                      onChange={(e) => setForm({ ...form, warung_name: e.target.value })}
+                      placeholder="Misal: Warung 1, Warung Cabang A..."
+                      className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 outline-none transition-all border-gray-200 focus:ring-primary-500/20 focus:border-primary-500 bg-gray-50/50 hover:bg-white focus:bg-white dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-100"
+                    />
+                  </div>
+                )}
                 <div className="flex gap-3 pt-2">
                   <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
                     Batal

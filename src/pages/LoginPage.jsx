@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { login as loginApi } from '../api/authApi';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, ShoppingCart, ArrowRight, UserCircle, Briefcase, Sun, Moon } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ShoppingCart, ArrowRight, Sun, Moon } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -192,29 +192,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Demo Accounts */}
-          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
-            <p className="text-xs text-gray-400 text-center mb-3.5 font-medium uppercase tracking-wider">Akses Cepat Demo</p>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => { setEmail('admin@simplepos.com'); setPassword('password'); }}
-                className="flex items-center justify-center gap-2 bg-gray-50 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-200 dark:hover:border-primary-700 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 py-2.5 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer group"
-              >
-                <UserCircle className="w-4 h-4 text-primary-500 group-hover:scale-110 transition-transform" />
-                Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => { setEmail('kasir@simplepos.com'); setPassword('password'); }}
-                className="flex items-center justify-center gap-2 bg-gray-50 dark:bg-gray-800 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:border-amber-200 dark:hover:border-amber-700 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 py-2.5 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer group"
-              >
-                <Briefcase className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
-                Kasir
-              </button>
-            </div>
-          </div>
         </motion.div>
       </div>
     </div>

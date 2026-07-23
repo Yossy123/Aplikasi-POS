@@ -5,6 +5,7 @@ import { createTransaction } from '../../api/transactionApi';
 import PaymentCash from './PaymentCash';
 import PaymentQRIS from './PaymentQRIS';
 import Receipt from '../receipt/Receipt';
+import AdminApprovalModal from '../ui/AdminApprovalModal';
 import { useAuth } from '../../context/AuthContext';
 import { X, Banknote, QrCode, CheckCircle, Printer } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatCurrency';
@@ -16,6 +17,17 @@ export default function CheckoutModal({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [createdTransaction, setCreatedTransaction] = useState(null);
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
+
+  const handleCancelClick = () => {
+    if (createdTransaction) {
+      handleFinish();
+    } else if (isAdmin) {
+      onClose();
+    } else {
+      setShowApprovalModal(true);
+    }
+  };
 
   const handlePayment = async (cashPaid = null) => {
     setLoading(true);
@@ -104,7 +116,7 @@ export default function CheckoutModal({ onClose, onSuccess }) {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
     >
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={createdTransaction ? handleFinish : onClose} />
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={handleCancelClick} />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -118,7 +130,7 @@ export default function CheckoutModal({ onClose, onSuccess }) {
             {createdTransaction ? 'Transaksi Berhasil' : 'Pilih Metode Pembayaran'}
           </h3>
           {!createdTransaction && (
-            <button onClick={onClose} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all cursor-pointer">
+            <button onClick={handleCancelClick} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all cursor-pointer">
               <X className="w-5 h-5" />
             </button>
           )}
@@ -227,6 +239,18 @@ export default function CheckoutModal({ onClose, onSuccess }) {
           )}
         </div>
       </motion.div>
+
+      {/* Admin Approval Modal for Checkout Cancellation */}
+      <AdminApprovalModal
+        isOpen={showApprovalModal}
+        onClose={() => setShowApprovalModal(false)}
+        onApproved={() => {
+          setShowApprovalModal(false);
+          onClose();
+        }}
+        title="Persetujuan Pembatalan Checkout"
+        message="Membatalkan proses pembayaran / checkout oleh Kasir memerlukan persetujuan dan verifikasi password Administrator."
+      />
     </motion.div>
   );
 }
