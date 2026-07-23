@@ -14,6 +14,7 @@ class Product extends Model
         'name',
         'price',
         'stock',
+        'warung_name',
     ];
 
     protected function casts(): array

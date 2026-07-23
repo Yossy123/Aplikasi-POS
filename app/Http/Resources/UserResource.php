@@ -15,6 +15,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role' => $this->role->value,
             'role_label' => $this->role->value === 'admin' ? 'Admin' : 'Kasir',
+            'warung_name' => $this->warung_name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

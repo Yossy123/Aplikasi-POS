@@ -20,6 +20,15 @@ class ProductController extends Controller
         $filters = $request->only(['search']);
         $perPage = $request->integer('per_page', 20);
 
+        // Auto-filter by warung_name for kasir users
+        $user = $request->user();
+        if ($user && $user->role->value === 'kasir' && $user->warung_name) {
+            $filters['warung_name'] = $user->warung_name;
+        } elseif ($request->filled('warung_name')) {
+            // Admin can filter by warung_name via query param
+            $filters['warung_name'] = $request->input('warung_name');
+        }
+
         $products = $this->productService->list($filters, $perPage);
 
         return ProductResource::collection($products);

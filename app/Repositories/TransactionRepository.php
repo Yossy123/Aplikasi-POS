@@ -45,6 +45,35 @@ class TransactionRepository implements TransactionRepositoryInterface
         return (float) Transaction::whereDate('created_at', now()->toDateString())->sum('total_price');
     }
 
+    public function getTodayRevenueByWarung(): array
+    {
+        $today = now()->toDateString();
+
+        $userRevenues = Transaction::selectRaw('user_id, SUM(total_price) as revenue, COUNT(id) as tx_count')
+            ->whereDate('created_at', $today)
+            ->groupBy('user_id')
+            ->get()
+            ->keyBy('user_id');
+
+        $users = \App\Models\User::where('role', 'kasir')->orderBy('id', 'asc')->get();
+
+        $breakdown = [];
+        foreach ($users as $user) {
+            $userStat = $userRevenues->get($user->id);
+            $warungName = $user->warung_name ?: ($user->name ?: 'Warung #' . $user->id);
+
+            $breakdown[] = [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'warung_name' => $warungName,
+                'revenue' => $userStat ? (float) $userStat->revenue : 0.0,
+                'tx_count' => $userStat ? (int) $userStat->tx_count : 0,
+            ];
+        }
+
+        return $breakdown;
+    }
+
     public function getDailyRevenueHistory(int $days = 7): array
     {
         $startDate = now()->subDays($days - 1)->startOfDay();

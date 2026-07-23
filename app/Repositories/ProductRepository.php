@@ -15,6 +15,10 @@ class ProductRepository implements ProductRepositoryInterface
             $query->where('name', 'like', '%' . $filters['search'] . '%');
         }
 
+        if (!empty($filters['warung_name'])) {
+            $query->where('warung_name', $filters['warung_name']);
+        }
+
         return $query->orderBy('name')->paginate($perPage);
     }
 

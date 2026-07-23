@@ -62,10 +62,12 @@ class TransactionController extends Controller
     public function todayRevenue()
     {
         $revenue = $this->transactionService->getTodayRevenue();
+        $byWarung = $this->transactionService->getTodayRevenueByWarung();
 
         return response()->json([
             'data' => [
-                'today_revenue' => $revenue
+                'today_revenue' => $revenue,
+                'by_warung' => $byWarung,
             ]
         ]);
     }

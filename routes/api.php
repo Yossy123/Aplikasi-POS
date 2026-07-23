@@ -17,15 +17,18 @@ Route::get('/health-check', function () {
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
-    // Auth
+    // Auth & OTP Verification
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/verify-supervisor-code', [AuthController::class, 'verifySupervisorCode']);
 
     // Products (read for all authenticated users)
     Route::get('/products', [ProductController::class, 'index']);
 
     // Products and Admin Transactions (write for admin, transaction logs for admin only)
     Route::middleware(EnsureUserIsAdmin::class)->group(function () {
+        Route::get('/supervisor-code', [AuthController::class, 'getSupervisorCode']);
+        Route::post('/supervisor-code/regenerate', [AuthController::class, 'regenerateSupervisorCode']);
         Route::post('/products', [ProductController::class, 'store']);
         Route::put('/products/{id}', [ProductController::class, 'update']);
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);

@@ -20,6 +20,7 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', Rule::unique('users')],
             'password' => ['required', 'string', 'min:6'],
             'role' => ['required', Rule::enum(UserRole::class)],
+            'warung_name' => ['nullable', 'string', 'max:255'],
         ];
     }
 

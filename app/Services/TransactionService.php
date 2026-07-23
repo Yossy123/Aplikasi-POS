@@ -37,6 +37,11 @@ class TransactionService
         return $this->transactionRepository->getTodayRevenue();
     }
 
+    public function getTodayRevenueByWarung(): array
+    {
+        return $this->transactionRepository->getTodayRevenueByWarung();
+    }
+
     public function getDailyRevenueHistory(int $days = 7): array
     {
         return $this->transactionRepository->getDailyRevenueHistory($days);

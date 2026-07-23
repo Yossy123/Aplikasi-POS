@@ -22,6 +22,7 @@ class UpdateUserRequest extends FormRequest
             'email' => ['sometimes', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
             'password' => ['sometimes', 'string', 'min:6', 'nullable'],
             'role' => ['sometimes', Rule::enum(UserRole::class)],
+            'warung_name' => ['nullable', 'string', 'max:255'],
         ];
     }
 
