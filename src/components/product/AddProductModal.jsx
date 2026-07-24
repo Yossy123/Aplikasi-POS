@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createProduct, updateProduct } from '../../api/productApi';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
-import { X, Tag, DollarSign, Box, Plus, Edit3, Utensils, Store } from 'lucide-react';
+import { X, Tag, DollarSign, Plus, Edit3, Utensils, Store } from 'lucide-react';
 
 const WARUNG_OPTIONS = [
   'Soto Warung 1',
@@ -20,7 +20,6 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
   const [form, setForm] = useState({
     name: initialData?.name || '',
     price: initialData?.price ? String(initialData.price) : '',
-    stock: initialData?.stock !== undefined ? String(initialData.stock) : '100',
     warung_name: initialData?.warung_name || (isKasir ? kasirWarung : WARUNG_OPTIONS[0]),
   });
 
@@ -29,14 +28,12 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
       setForm({
         name: initialData.name || '',
         price: initialData.price ? String(initialData.price) : '',
-        stock: initialData.stock !== undefined ? String(initialData.stock) : '100',
         warung_name: initialData.warung_name || (isKasir ? kasirWarung : WARUNG_OPTIONS[0]),
       });
     } else {
       setForm({
         name: '',
         price: '',
-        stock: '100',
         warung_name: isKasir ? kasirWarung : WARUNG_OPTIONS[0],
       });
     }
@@ -53,7 +50,6 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
     const errors = {};
     if (!formData.name.trim()) errors.name = 'Nama menu harus diisi.';
     if (!formData.price || parseFloat(formData.price) <= 0) errors.price = 'Harga harus lebih dari 0.';
-    if (formData.stock === '' || parseInt(formData.stock) < 0) errors.stock = 'Stok tidak valid.';
     if (!formData.warung_name) errors.warung_name = 'Pilih warung terlebih dahulu.';
     return errors;
   };
@@ -67,7 +63,7 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validate(form);
-    setTouched({ name: true, price: true, stock: true, warung_name: true });
+    setTouched({ name: true, price: true, warung_name: true });
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
@@ -76,7 +72,6 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
       const payload = {
         name: form.name.trim(),
         price: parseFloat(form.price),
-        stock: parseInt(form.stock),
         warung_name: form.warung_name,
       };
 
@@ -221,29 +216,6 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
               </div>
               {touched.price && fieldErrors.price && (
                 <p className="mt-1 text-xs text-red-500">{fieldErrors.price}</p>
-              )}
-            </div>
-
-            {/* Stok */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">
-                Stok Awal
-              </label>
-              <div className="relative">
-                <Box className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="number"
-                  min="0"
-                  value={form.stock}
-                  onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                  onBlur={() => handleBlur('stock')}
-                  placeholder="100"
-                  className={inputClass('stock')}
-                  required
-                />
-              </div>
-              {touched.stock && fieldErrors.stock && (
-                <p className="mt-1 text-xs text-red-500">{fieldErrors.stock}</p>
               )}
             </div>
 

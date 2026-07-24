@@ -9,14 +9,12 @@ export function CartProvider({ children }) {
     setItems((prev) => {
       const existing = prev.find((item) => item.product_id === product.id);
       if (existing) {
-        if (existing.qty >= product.stock) return prev;
         return prev.map((item) =>
           item.product_id === product.id
             ? { ...item, qty: item.qty + 1, subtotal: (item.qty + 1) * item.price }
             : item
         );
       }
-      if (product.stock <= 0) return prev;
       return [
         ...prev,
         {
@@ -25,7 +23,6 @@ export function CartProvider({ children }) {
           price: product.price,
           qty: 1,
           subtotal: product.price,
-          stock: product.stock,
         },
       ];
     });

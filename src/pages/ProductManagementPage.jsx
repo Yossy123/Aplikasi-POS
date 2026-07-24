@@ -100,7 +100,7 @@ export default function ProductManagementPage() {
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {isAdmin
-              ? 'Kelola menu dan stok produk untuk seluruh warung'
+              ? 'Kelola daftar menu untuk seluruh warung'
               : `Kelola daftar menu untuk ${user?.warung_name || 'Warung'}`}
           </p>
         </div>
@@ -158,14 +158,13 @@ export default function ProductManagementPage() {
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Produk</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Warung</th>
                 <th className="text-right px-6 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Harga</th>
-                <th className="text-right px-6 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Stok</th>
                 <th className="text-right px-6 py-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800/80">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-400 dark:text-gray-500">
+                  <td colSpan={4} className="px-6 py-12 text-center text-gray-400 dark:text-gray-500">
                     <div className="flex items-center justify-center gap-2">
                       <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-500 border-t-transparent" />
                       Memuat...
@@ -174,7 +173,7 @@ export default function ProductManagementPage() {
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-16 text-center text-gray-400 dark:text-gray-500">
+                  <td colSpan={4} className="px-6 py-16 text-center text-gray-400 dark:text-gray-500">
                     <Package className="w-10 h-10 text-gray-200 dark:text-gray-700 mx-auto mb-3" />
                     <p className="text-sm font-medium">Tidak ada produk ditemukan</p>
                   </td>
@@ -204,17 +203,6 @@ export default function ProductManagementPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <span className="text-sm text-gray-700 dark:text-gray-300 font-medium tabular-nums">{formatCurrency(product.price)}</span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        product.stock > 10
-                          ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                          : product.stock > 0
-                          ? 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                          : 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                      }`}>
-                        {product.stock}
-                      </span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-1">

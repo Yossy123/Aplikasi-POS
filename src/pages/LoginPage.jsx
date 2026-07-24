@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import { login as loginApi } from '../api/authApi';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, ShoppingCart, ArrowRight, Sun, Moon } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ShoppingCart, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -13,7 +12,6 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -68,8 +66,8 @@ export default function LoginPage() {
             transition={{ delay: 0.35, duration: 0.6 }}
             className="text-slate-400 text-base leading-relaxed"
           >
-            Platform POS modern untuk mengelola penjualan,
-            stok, dan riwayat transaksi dengan cepat dan mudah.
+            Platform POS modern untuk mengelola penjualan
+            dan riwayat transaksi dengan cepat dan mudah.
           </motion.p>
         </div>
 
@@ -81,14 +79,6 @@ export default function LoginPage() {
 
       {/* ==================== RIGHT PANEL ==================== */}
       <div className="flex items-center justify-center min-h-screen lg:min-h-0 px-8 py-12 sm:px-16 lg:px-20 xl:px-24 bg-white dark:bg-gray-950 relative">
-        {/* Theme toggle button */}
-        <button
-          onClick={toggleTheme}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
-        >
-          {theme === 'dark' ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5 text-indigo-500" />}
-        </button>
-
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

@@ -1,7 +1,6 @@
 import AdminCancellationWidget from '../ui/AdminCancellationWidget';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import { logout as logoutApi } from '../../api/authApi';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -16,14 +15,11 @@ import {
   Users,
   Store,
   TrendingUp,
-  Sun,
-  Moon,
   Utensils,
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, onClose }) {
   const { user, isAdmin, isKasir, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -138,7 +134,7 @@ export default function Sidebar({ isOpen, onClose }) {
           )}
         </nav>
 
-        {/* Theme Toggle + User & Logout */}
+        {/* User & Logout */}
         <div className="p-3 border-t border-gray-100 dark:border-gray-800 space-y-2">
           {/* Supervisor OTP for Admin */}
           {isAdmin && (
@@ -146,24 +142,6 @@ export default function Sidebar({ isOpen, onClose }) {
               <AdminCancellationWidget />
             </div>
           )}
-
-          {/* Dark mode toggle */}
-          <button
-            onClick={toggleTheme}
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-colors cursor-pointer"
-          >
-            {theme === 'dark' ? (
-              <>
-                <Sun className="w-5 h-5 text-amber-400" />
-                <span className="font-medium">Mode Terang</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-5 h-5 text-indigo-400" />
-                <span className="font-medium">Mode Gelap</span>
-              </>
-            )}
-          </button>
 
           {/* User info */}
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">

@@ -22,11 +22,8 @@ export default function CartItem({ item, onUpdateQty, onRemove }) {
           {item.qty}
         </span>
         <button
-          onClick={() => {
-            if (item.qty < item.stock) onUpdateQty(item.product_id, item.qty + 1);
-          }}
-          disabled={item.qty >= item.stock}
-          className="w-7 h-7 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-all text-sm disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+          onClick={() => onUpdateQty(item.product_id, item.qty + 1)}
+          className="w-7 h-7 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-all text-sm cursor-pointer"
         >
           <Plus className="w-3 h-3" />
         </button>
