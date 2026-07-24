@@ -115,16 +115,18 @@ export default function CartPanel({ onCheckout }) {
         )}
       </div>
 
-      {/* Supervisor Approval Modal */}
+      {/* Admin Cancellation Approval Modal */}
       <AdminApprovalModal
         isOpen={!!pendingAction}
         onClose={() => setPendingAction(null)}
         onApproved={handleApproved}
-        title="Persetujuan Administrator / Supervisi"
+        type={pendingAction?.type === 'clear' ? 'clear_cart' : 'remove_item'}
+        details={pendingAction?.type === 'remove' ? pendingAction?.itemName : ''}
+        title="Konfirmasi Pembatalan Admin"
         message={
           pendingAction?.type === 'clear'
-            ? 'Pengosongan seluruh isi keranjang oleh Kasir memerlukan persetujuan dan verifikasi password Administrator.'
-            : `Menghapus item "${pendingAction?.itemName || 'produk'}" dari keranjang oleh Kasir memerlukan verifikasi password Administrator.`
+            ? 'Pengosongan seluruh isi keranjang oleh Kasir memerlukan konfirmasi dan persetujuan Admin.'
+            : `Menghapus item "${pendingAction?.itemName || 'produk'}" dari keranjang oleh Kasir memerlukan konfirmasi dan persetujuan Admin.`
         }
       />
     </>

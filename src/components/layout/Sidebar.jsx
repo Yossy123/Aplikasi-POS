@@ -1,4 +1,4 @@
-import SupervisorOtpWidget from '../ui/SupervisorOtpWidget';
+import AdminCancellationWidget from '../ui/AdminCancellationWidget';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -143,7 +143,7 @@ export default function Sidebar({ isOpen, onClose }) {
           {/* Supervisor OTP for Admin */}
           {isAdmin && (
             <div className="px-1">
-              <SupervisorOtpWidget />
+              <AdminCancellationWidget />
             </div>
           )}
 

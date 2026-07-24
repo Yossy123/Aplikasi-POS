@@ -248,8 +248,9 @@ export default function CheckoutModal({ onClose, onSuccess }) {
           setShowApprovalModal(false);
           onClose();
         }}
-        title="Persetujuan Pembatalan Checkout"
-        message="Membatalkan proses pembayaran / checkout oleh Kasir memerlukan persetujuan dan verifikasi password Administrator."
+        type="cancel_checkout"
+        title="Konfirmasi Pembatalan Checkout"
+        message="Membatalkan proses pembayaran / checkout oleh Kasir memerlukan konfirmasi dan persetujuan Admin."
       />
     </motion.div>
   );

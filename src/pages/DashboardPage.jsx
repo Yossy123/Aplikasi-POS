@@ -7,7 +7,7 @@ import ProductGrid from '../components/pos/ProductGrid';
 import CartPanel from '../components/pos/CartPanel';
 import CheckoutModal from '../components/checkout/CheckoutModal';
 import AddProductModal from '../components/product/AddProductModal';
-import SupervisorOtpWidget from '../components/ui/SupervisorOtpWidget';
+import AdminCancellationWidget from '../components/ui/AdminCancellationWidget';
 import { useAuth } from '../context/AuthContext';
 import { getTodayRevenue } from '../api/transactionApi';
 import { formatCurrency } from '../utils/formatCurrency';
@@ -132,7 +132,7 @@ export default function DashboardPage() {
               {/* Admin Widgets - Desktop */}
               {isAdmin && (
                 <div className="hidden lg:flex items-center gap-3 self-start sm:self-center">
-                  <SupervisorOtpWidget />
+                  <AdminCancellationWidget />
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

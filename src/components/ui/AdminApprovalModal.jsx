@@ -1,55 +1,106 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { verifySupervisorCode } from '../../api/authApi';
+import {
+  createCancellationRequest,
+  getCancellationRequestStatus,
+} from '../../api/cancellationApi';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
-import { ShieldAlert, KeyRound, X, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, RefreshCw, X, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 
 export default function AdminApprovalModal({
   isOpen,
   onClose,
   onApproved,
-  title = 'Persetujuan Administrator',
-  message = 'Tindakan ini memerlukan 6-digit Kode OTP Supervisi dari Administrator.',
+  title = 'Persetujuan Pembatalan Admin',
+  message = 'Permintaan pembatalan ini memerlukan persetujuan dari Administrator.',
+  type = 'clear_cart',
+  details = '',
 }) {
   const { user } = useAuth();
-  const [code, setCode] = useState('');
-  const [verifying, setVerifying] = useState(false);
-  const [error, setError] = useState('');
   const { showToast } = useToast();
+  const [requestId, setRequestId] = useState(null);
+  const [requestStatus, setRequestStatus] = useState('initiating'); // initiating, pending, approved, rejected, error
+  const [errorMsg, setErrorMsg] = useState('');
+  const pollIntervalRef = useRef(null);
 
   const userWarung = user?.warung_name || user?.name || 'Warung';
 
-  if (!isOpen) return null;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const cleanCode = code.trim();
-    if (!cleanCode || cleanCode.length < 6) {
-      setError('Masukkan 6 digit Kode OTP Supervisi Admin.');
-      return;
-    }
-
-    setError('');
-    setVerifying(true);
-
-    try {
-      await verifySupervisorCode(cleanCode, userWarung);
-      showToast(`Persetujuan Kode OTP Supervisi untuk ${userWarung} berhasil!`, 'success');
-      setCode('');
-      onApproved();
-      onClose();
-    } catch (err) {
-      const msg = err.response?.data?.message || `Kode OTP Supervisi untuk ${userWarung} salah atau kedaluwarsa.`;
-      setError(msg);
-    } finally {
-      setVerifying(false);
+  const stopPolling = () => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
     }
   };
 
+  // Submit request on modal open
+  useEffect(() => {
+    if (!isOpen) {
+      setRequestId(null);
+      setRequestStatus('initiating');
+      setErrorMsg('');
+      stopPolling();
+      return;
+    }
+
+    let isMounted = true;
+
+    const startRequest = async () => {
+      try {
+        setRequestStatus('initiating');
+        const res = await createCancellationRequest(type, details);
+        if (!isMounted) return;
+
+        const req = res.data.data;
+        setRequestId(req.id);
+        setRequestStatus('pending');
+
+        // Start polling status
+        pollIntervalRef.current = setInterval(async () => {
+          try {
+            const statusRes = await getCancellationRequestStatus(req.id);
+            const updatedReq = statusRes.data.data;
+
+            if (updatedReq.status === 'approved') {
+              stopPolling();
+              if (isMounted) {
+                setRequestStatus('approved');
+                showToast(`Pembatalan disetujui oleh Admin!`, 'success');
+                setTimeout(() => {
+                  onApproved();
+                  onClose();
+                }, 500);
+              }
+            } else if (updatedReq.status === 'rejected') {
+              stopPolling();
+              if (isMounted) {
+                setRequestStatus('rejected');
+                setErrorMsg('Permintaan pembatalan ditolak oleh Admin.');
+              }
+            }
+          } catch {
+            /* ignore transient polling errors */
+          }
+        }, 2000);
+      } catch (err) {
+        if (!isMounted) return;
+        setRequestStatus('error');
+        setErrorMsg(err.response?.data?.message || 'Gagal mengirim permintaan pembatalan ke Admin.');
+      }
+    };
+
+    startRequest();
+
+    return () => {
+      isMounted = false;
+      stopPolling();
+    };
+  }, [isOpen, type, details]);
+
+  if (!isOpen) return null;
+
   const handleClose = () => {
-    setCode('');
-    setError('');
+    stopPolling();
     onClose();
   };
 
@@ -77,7 +128,7 @@ export default function AdminApprovalModal({
               </div>
               <div>
                 <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">{title}</h3>
-                <p className="text-xs text-gray-400">Otorisasi OTP Supervisi ({userWarung})</p>
+                <p className="text-xs text-gray-400">Pengajuan Pembatalan ({userWarung})</p>
               </div>
             </div>
             <button
@@ -88,69 +139,95 @@ export default function AdminApprovalModal({
             </button>
           </div>
 
-          {/* Description */}
+          {/* Description / Message */}
           <div className="bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 p-3.5 rounded-2xl">
             <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed font-medium">
               {message}
             </p>
           </div>
 
-          {/* Error display */}
-          {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl text-xs font-semibold text-red-600 dark:text-red-400">
-              {error}
-            </div>
-          )}
+          {/* Status content */}
+          <div className="py-4 flex flex-col items-center justify-center text-center space-y-3">
+            {requestStatus === 'initiating' && (
+              <>
+                <RefreshCw className="w-8 h-8 text-amber-500 animate-spin" />
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  Mengirim permintaan pembatalan...
+                </p>
+              </>
+            )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">
-                Masukkan Kode OTP Supervisi ({userWarung})
-              </label>
-              <div className="relative">
-                <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-500" />
-                <input
-                  type="text"
-                  maxLength={6}
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-                  placeholder="123456"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl text-lg font-black tracking-widest font-mono text-center focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all bg-gray-50 dark:bg-gray-800/60 hover:bg-white dark:hover:bg-gray-800 focus:bg-white dark:focus:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-300"
-                  autoFocus
-                  required
-                />
-              </div>
-              <p className="text-[11px] text-gray-400 mt-1 text-center">
-                Minta 6 digit kode OTP khusus <span className="font-semibold text-amber-600 dark:text-amber-400">{userWarung}</span> yang tampil di layar Admin.
-              </p>
-            </div>
+            {requestStatus === 'pending' && (
+              <>
+                <div className="relative">
+                  <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/40 rounded-full flex items-center justify-center">
+                    <RefreshCw className="w-6 h-6 text-amber-600 dark:text-amber-400 animate-spin" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                    Menunggu Konfirmasi Admin...
+                  </h4>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Permintaan telah dikirim ke Dashboard Admin. Harap minta Admin menekan tombol <span className="font-bold text-emerald-600">Oke</span> di layarnya.
+                  </p>
+                </div>
+              </>
+            )}
 
-            {/* Actions */}
-            <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                Batal
-              </button>
-              <button
-                type="submit"
-                disabled={verifying || code.length < 6}
-                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-xl text-xs font-bold hover:from-amber-700 hover:to-amber-800 disabled:opacity-50 transition-all shadow-md shadow-amber-500/25 flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                {verifying ? (
-                  'Memverifikasi...'
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    Verifikasi OTP
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
+            {requestStatus === 'approved' && (
+              <>
+                <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/40 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-emerald-700 dark:text-emerald-400">
+                    Disetujui oleh Admin!
+                  </h4>
+                  <p className="text-xs text-gray-400 mt-1">Memproses pembatalan...</p>
+                </div>
+              </>
+            )}
+
+            {requestStatus === 'rejected' && (
+              <>
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center">
+                  <XCircle className="w-7 h-7 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-red-600 dark:text-red-400">
+                    Permintaan Ditolak
+                  </h4>
+                  <p className="text-xs text-gray-400 mt-1">{errorMsg}</p>
+                </div>
+              </>
+            )}
+
+            {requestStatus === 'error' && (
+              <>
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="w-7 h-7 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-red-600 dark:text-red-400">
+                    Terjadi Kesalahan
+                  </h4>
+                  <p className="text-xs text-gray-400 mt-1">{errorMsg}</p>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Action button */}
+          <div className="flex justify-end pt-2 border-t border-gray-100 dark:border-gray-800">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            >
+              {requestStatus === 'pending' ? 'Batalkan Permintaan' : 'Tutup'}
+            </button>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
