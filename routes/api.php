@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CancellationRequestController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
@@ -17,22 +18,30 @@ Route::get('/health-check', function () {
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
-    // Auth & OTP Verification
+    // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
-    Route::post('/verify-supervisor-code', [AuthController::class, 'verifySupervisorCode']);
+
+    // Cancellation Requests (Kasir creates, views status)
+    Route::post('/cancellation-requests', [CancellationRequestController::class, 'store']);
+    Route::get('/cancellation-requests/{id}', [CancellationRequestController::class, 'show']);
 
     // Products (read for all authenticated users)
     Route::get('/products', [ProductController::class, 'index']);
 
-    // Products and Admin Transactions (write for admin, transaction logs for admin only)
+    // Admin Routes
     Route::middleware(EnsureUserIsAdmin::class)->group(function () {
-        Route::get('/supervisor-code', [AuthController::class, 'getSupervisorCode']);
-        Route::post('/supervisor-code/regenerate', [AuthController::class, 'regenerateSupervisorCode']);
+        // Admin Cancellation Approvals
+        Route::get('/cancellation-requests', [CancellationRequestController::class, 'index']);
+        Route::post('/cancellation-requests/{id}/approve', [CancellationRequestController::class, 'approve']);
+        Route::post('/cancellation-requests/{id}/reject', [CancellationRequestController::class, 'reject']);
+
+        // Products management
         Route::post('/products', [ProductController::class, 'store']);
         Route::put('/products/{id}', [ProductController::class, 'update']);
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
+        // Transactions management
         Route::get('/transactions', [TransactionController::class, 'index']);
         Route::get('/transactions/today-revenue', [TransactionController::class, 'todayRevenue']);
         Route::get('/transactions/daily-revenue', [TransactionController::class, 'dailyRevenue']);
