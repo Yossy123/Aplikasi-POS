@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
             ['email' => 'admin@simplepos.com'],
             [
                 'name' => 'Administrator',
-                'password' => bcrypt('password'),
+                'password' => 'password',
                 'role' => UserRole::ADMIN,
                 'warung_name' => null,
             ]
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                 ['email' => $w['email']],
                 [
                     'name' => $w['name'],
-                    'password' => bcrypt('password'),
+                    'password' => 'password',
                     'role' => UserRole::KASIR,
                     'warung_name' => $w['warung'],
                 ]

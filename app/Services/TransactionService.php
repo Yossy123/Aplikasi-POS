@@ -57,7 +57,7 @@ class TransactionService
         $productIds = array_column($items, 'product_id');
         $products = Product::whereIn('id', $productIds)->lockForUpdate()->get()->keyBy('id');
 
-        // Validate stock availability and calculate totals
+        // Calculate totals and validate item existence
         $lineItems = [];
         foreach ($items as $item) {
             $product = $products->get($item['product_id']);
@@ -65,12 +65,6 @@ class TransactionService
             if (!$product) {
                 throw ValidationException::withMessages([
                     'items' => ["Product with ID {$item['product_id']} not found."],
-                ]);
-            }
-
-            if ($product->stock < $item['qty']) {
-                throw ValidationException::withMessages([
-                    'items' => ["Insufficient stock for {$product->name}. Available: {$product->stock}, Requested: {$item['qty']}."],
                 ]);
             }
 
@@ -92,7 +86,7 @@ class TransactionService
         $paymentResult = $handler->process($paymentData);
 
         // Execute transaction atomically
-        return DB::transaction(function () use ($paymentMethod, $totalPrice, $paymentResult, $lineItems, $products, $items) {
+        return DB::transaction(function () use ($paymentMethod, $totalPrice, $paymentResult, $lineItems) {
             // Generate invoice number
             $invoiceNumber = $this->generateInvoiceNumber();
 
@@ -106,14 +100,11 @@ class TransactionService
                 'change' => $paymentResult['change'],
             ]);
 
-            // Create line items and decrement stock
+            // Create line items
             foreach ($lineItems as $lineItem) {
                 TransactionDetail::create(array_merge($lineItem, [
                     'transaction_id' => $transaction->id,
                 ]));
-
-                $product = $products->get($lineItem['product_id']);
-                $product->decrement('stock', $lineItem['qty']);
             }
 
             return $transaction->load(['user', 'details.product']);

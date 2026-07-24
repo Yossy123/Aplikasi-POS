@@ -29,9 +29,31 @@ class CancellationRequestController extends Controller
             'status' => 'pending',
         ]);
 
+        $cancellation->load('user:id,name,warung_name');
+
+        // Send email notification to all Admin users
+        try {
+            $adminEmails = \App\Models\User::where('role', \App\Enums\UserRole::ADMIN->value)
+                ->pluck('email')
+                ->filter()
+                ->toArray();
+
+            $mailUser = config('mail.from.address') ?: env('MAIL_USERNAME');
+            if ($mailUser && !in_array($mailUser, $adminEmails)) {
+                $adminEmails[] = $mailUser;
+            }
+
+            if (!empty($adminEmails)) {
+                \Illuminate\Support\Facades\Mail::to($adminEmails)
+                    ->send(new \App\Mail\CancellationRequestedMail($cancellation));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email notifikasi pembatalan: ' . $e->getMessage());
+        }
+
         return response()->json([
             'message' => 'Permintaan pembatalan diajukan, menunggu persetujuan Admin.',
-            'data' => $cancellation->load('user:id,name,warung_name'),
+            'data' => $cancellation,
         ], 201);
     }
 

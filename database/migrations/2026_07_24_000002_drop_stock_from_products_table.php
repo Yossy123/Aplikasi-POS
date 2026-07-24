@@ -9,16 +9,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('warung_name')->nullable()->after('price');
-            $table->index('warung_name');
+            if (Schema::hasColumn('products', 'stock')) {
+                $table->dropColumn('stock');
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropIndex(['warung_name']);
-            $table->dropColumn('warung_name');
+            $table->unsignedInteger('stock')->default(0);
         });
     }
 };
