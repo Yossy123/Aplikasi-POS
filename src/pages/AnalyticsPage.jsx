@@ -136,7 +136,7 @@ export default function AnalyticsPage() {
       </div>
 
       {loading ? (
-        <div className="min-h-[400px] bg-white rounded-2xl border border-gray-100 flex items-center justify-center">
+        <div className="min-h-100 bg-white rounded-2xl border border-gray-100 flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-500 border-t-transparent" />
             <p className="text-sm text-gray-500 font-medium">Memuat data analitik...</p>

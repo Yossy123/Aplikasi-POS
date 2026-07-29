@@ -118,7 +118,7 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
           {/* Modal Header */}
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950/60 dark:to-primary-900/60 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-400">
+              <div className="w-10 h-10 bg-linear-to-br from-primary-50 to-primary-100 dark:from-primary-950/60 dark:to-primary-900/60 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-400">
                 {initialData ? <Edit3 className="w-5 h-5" /> : <Utensils className="w-5 h-5" />}
               </div>
               <div>
@@ -231,7 +231,7 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl text-xs font-bold hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 transition-all shadow-md shadow-primary-500/25 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 px-4 py-2.5 bg-linear-to-r from-primary-600 to-primary-700 text-white rounded-xl text-xs font-bold hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 transition-all shadow-md shadow-primary-500/25 flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {saving ? (
                   'Menyimpan...'

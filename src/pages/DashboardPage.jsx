@@ -109,7 +109,7 @@ export default function DashboardPage() {
                   {isAdmin && (
                     <button
                       onClick={() => setShowWarungModal(true)}
-                      className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-100/60 dark:border-emerald-900/40 px-3 py-1.5 rounded-xl cursor-pointer hover:bg-emerald-100/50 transition-all"
+                      className="flex items-center gap-1.5 bg-linear-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border border-emerald-100/60 dark:border-emerald-900/40 px-3 py-1.5 rounded-xl cursor-pointer hover:bg-emerald-100/50 transition-all"
                     >
                       <DollarSign className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                       <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">{formatCurrency(todayRevenue)}</span>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setShowWarungModal(true)}
-                    className="flex items-center gap-3 bg-gradient-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-950/40 dark:to-teal-950/20 border border-emerald-200/60 dark:border-emerald-900/40 px-4 py-2 rounded-2xl cursor-pointer hover:shadow-md hover:border-emerald-300 transition-all group text-left"
+                    className="flex items-center gap-3 bg-linear-to-r from-emerald-50 to-teal-50/50 dark:from-emerald-950/40 dark:to-teal-950/20 border border-emerald-200/60 dark:border-emerald-900/40 px-4 py-2 rounded-2xl cursor-pointer hover:shadow-md hover:border-emerald-300 transition-all group text-left"
                   >
                     <div className="w-8 h-8 bg-emerald-500 dark:bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-sm shadow-emerald-500/20 group-hover:scale-105 transition-transform">
                       <TrendingUp className="w-4 h-4" />
@@ -163,7 +163,7 @@ export default function DashboardPage() {
 
               {/* Filter Warung Dropdown (Admin Only) */}
               {isAdmin && (
-                <div className="relative min-w-[170px]">
+                <div className="relative min-w-42.5">
                   <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                   <select
                     value={selectedWarung}
@@ -182,7 +182,7 @@ export default function DashboardPage() {
               {isAdmin && (
                 <button
                   onClick={() => setShowAddMenuModal(true)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl text-xs font-semibold shadow-md shadow-primary-500/20 transition-all cursor-pointer shrink-0 justify-center"
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl text-xs font-semibold shadow-md shadow-primary-500/20 transition-all cursor-pointer shrink-0 justify-center"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah Menu</span>
@@ -198,7 +198,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Desktop Cart */}
-        <div className="hidden lg:block w-80 xl:w-[360px]">
+        <div className="hidden lg:block w-80 xl:w-90">
           <CartPanel onCheckout={() => setShowCheckout(true)} />
         </div>
       </div>
@@ -262,7 +262,7 @@ export default function DashboardPage() {
               {/* Modal Header */}
               <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+                  <div className="w-10 h-10 bg-linear-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
                     <Building2 className="w-5 h-5" />
                   </div>
                   <div>
@@ -281,7 +281,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Total Card */}
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-50/60 dark:from-emerald-950/40 dark:to-teal-950/20 border border-emerald-200/60 dark:border-emerald-900/40 p-4 rounded-2xl text-center">
+              <div className="bg-linear-to-br from-emerald-50 to-teal-50/60 dark:from-emerald-950/40 dark:to-teal-950/20 border border-emerald-200/60 dark:border-emerald-900/40 p-4 rounded-2xl text-center">
                 <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Total Seluruh Warung</p>
                 <p className="text-2xl font-black text-emerald-800 dark:text-emerald-300 mt-1">{formatCurrency(todayRevenue)}</p>
               </div>

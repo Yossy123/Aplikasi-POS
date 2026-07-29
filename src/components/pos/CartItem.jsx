@@ -30,7 +30,7 @@ export default function CartItem({ item, onUpdateQty, onRemove }) {
       </div>
 
       {/* Subtotal + Remove */}
-      <div className="text-right flex flex-col items-end min-w-[70px]">
+      <div className="text-right flex flex-col items-end min-w-17.5">
         <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 tabular-nums">
           {formatCurrency(item.subtotal)}
         </span>

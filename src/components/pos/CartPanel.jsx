@@ -55,7 +55,7 @@ export default function CartPanel({ onCheckout }) {
               <ShoppingBag className="w-4.5 h-4.5 text-gray-700 dark:text-gray-400" />
               <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">Keranjang</h3>
               {totalItems > 0 && (
-                <span className="bg-primary-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                <span className="bg-primary-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-5 text-center">
                   {totalItems}
                 </span>
               )}
@@ -107,7 +107,7 @@ export default function CartPanel({ onCheckout }) {
             </div>
             <button
               onClick={onCheckout}
-              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 active:shadow-md active:translate-y-0.5 text-sm cursor-pointer"
+              className="w-full bg-linear-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 active:shadow-md active:translate-y-0.5 text-sm cursor-pointer"
             >
               Bayar — {formatCurrency(totalPrice)}
             </button>

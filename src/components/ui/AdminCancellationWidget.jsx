@@ -87,7 +87,7 @@ export default function AdminCancellationWidget() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            className="fixed inset-0 z-9999 flex items-center justify-center p-4"
             style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
           >
             {/* Backdrop */}
@@ -106,7 +106,7 @@ export default function AdminCancellationWidget() {
               {/* Header */}
               <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-md shadow-amber-500/20">
+                  <div className="w-10 h-10 bg-linear-to-br from-amber-500 to-red-600 rounded-2xl flex items-center justify-center text-white shadow-md shadow-amber-500/20">
                     <ShieldAlert className="w-5 h-5" />
                   </div>
                   <div>
@@ -237,15 +237,15 @@ export default function AdminCancellationWidget() {
         onClick={() => setIsOpen(true)}
         className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl shadow-2xs transition-all cursor-pointer text-left group border ${
           requests.length > 0
-            ? 'bg-gradient-to-r from-red-500 to-amber-600 text-white border-red-400 shadow-red-500/20 animate-pulse'
-            : 'bg-gradient-to-r from-amber-50 to-orange-50/80 dark:from-amber-950/40 dark:to-orange-950/20 border-amber-200/80 dark:border-amber-900/50 hover:border-amber-300'
+            ? 'bg-linear-to-r from-red-500 to-amber-600 text-white border-red-400 shadow-red-500/20 animate-pulse'
+            : 'bg-linear-to-r from-amber-50 to-orange-50/80 dark:from-amber-950/40 dark:to-orange-950/20 border-amber-200/80 dark:border-amber-900/50 hover:border-amber-300'
         }`}
       >
         <div
-          className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform flex-shrink-0 ${
+          className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0 ${
             requests.length > 0
               ? 'bg-white/20 text-white'
-              : 'bg-gradient-to-br from-amber-500 to-red-600 text-white'
+              : 'bg-linear-to-br from-amber-500 to-red-600 text-white'
           }`}
         >
           <ShieldAlert className="w-4 h-4" />

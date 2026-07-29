@@ -69,7 +69,7 @@ export default function Sidebar({ isOpen, onClose }) {
         <div className="px-5 py-5 border-b border-gray-100 dark:border-gray-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
+              <div className="w-9 h-9 bg-linear-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
                 <ShoppingCart className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -145,7 +145,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* User info */}
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-9 h-9 bg-linear-to-br from-primary-100 to-primary-50 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center shrink-0">
               <User className="w-4.5 h-4.5 text-primary-600 dark:text-primary-400" />
             </div>
             <div className="flex-1 min-w-0">

@@ -32,13 +32,13 @@ export default function PaymentQRIS({ total, onPaymentSuccess }) {
       className="space-y-5 text-center"
     >
       {/* Total */}
-      <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/30 dark:to-blue-800/20 rounded-2xl p-4">
+      <div className="bg-linear-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/30 dark:to-blue-800/20 rounded-2xl p-4">
         <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">Total Tagihan</p>
         <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 tabular-nums">{formatCurrency(total)}</p>
       </div>
 
       {/* QR Code Image */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-4 max-w-[260px] mx-auto shadow-sm flex flex-col items-center">
+      <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-4 max-w-65 mx-auto shadow-sm flex flex-col items-center">
         <div className="text-primary-700 dark:text-primary-400 font-extrabold text-sm mb-2 italic tracking-wider">QRIS DANA</div>
         <div className="w-52 h-52 rounded-xl overflow-hidden border-2 border-gray-100 dark:border-gray-700 bg-white flex items-center justify-center">
           <img
@@ -70,7 +70,7 @@ export default function PaymentQRIS({ total, onPaymentSuccess }) {
       <button
         onClick={handleConfirmPayment}
         disabled={confirming}
-        className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 disabled:opacity-50 text-sm cursor-pointer flex items-center justify-center gap-2"
+        className="w-full bg-linear-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 disabled:opacity-50 text-sm cursor-pointer flex items-center justify-center gap-2"
       >
         {confirming ? (
           <>

@@ -141,7 +141,7 @@ export default function UserManagementPage() {
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg shadow-primary-500/25 cursor-pointer"
+          className="inline-flex items-center gap-2 bg-linear-to-r from-primary-600 to-primary-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg shadow-primary-500/25 cursor-pointer"
         >
           <Plus className="w-4.5 h-4.5" />
           Tambah Kasir
@@ -303,7 +303,7 @@ export default function UserManagementPage() {
             >
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-xl flex items-center justify-center">
+                  <div className="w-9 h-9 bg-linear-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-xl flex items-center justify-center">
                     {editingUser ? <Edit3 className="w-4.5 h-4.5 text-primary-600 dark:text-primary-400" /> : <Plus className="w-4.5 h-4.5 text-primary-600 dark:text-primary-400" />}
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -369,7 +369,7 @@ export default function UserManagementPage() {
                   <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
                     Batal
                   </button>
-                  <button type="submit" disabled={saving} className="flex-1 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 transition-all cursor-pointer">
+                  <button type="submit" disabled={saving} className="flex-1 px-4 py-2.5 bg-linear-to-r from-primary-600 to-primary-700 text-white rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 transition-all cursor-pointer">
                     {saving ? 'Menyimpan...' : 'Simpan'}
                   </button>
                 </div>

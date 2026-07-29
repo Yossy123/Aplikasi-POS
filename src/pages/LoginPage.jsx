@@ -32,14 +32,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2 bg-white dark:bg-gray-950">
       {/* ==================== LEFT PANEL ==================== */}
-      <div className="hidden lg:flex relative flex-col items-center justify-center p-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+      <div className="hidden lg:flex relative flex-col items-center justify-center p-16 bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
         {/* Background orbs */}
         <div className="absolute -top-32 -left-32 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-violet-500/20 rounded-full blur-3xl" />
 
         {/* Logo top-left */}
         <div className="absolute top-8 left-8 z-10 flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center">
+          <div className="w-9 h-9 bg-linear-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center">
             <ShoppingCart className="w-4.5 h-4.5 text-white" />
           </div>
           <span className="text-base font-bold text-white tracking-tight">SimplePOS</span>
@@ -55,7 +55,7 @@ export default function LoginPage() {
           >
             Kelola Bisnis
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-sky-300">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary-300 to-sky-300">
               Lebih Cerdas
             </span>
           </motion.h2>
@@ -83,11 +83,11 @@ export default function LoginPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-[420px]"
+          className="w-full max-w-105"
         >
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-10">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
+            <div className="w-10 h-10 bg-linear-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
               <ShoppingCart className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -111,7 +111,7 @@ export default function LoginPage() {
                 exit={{ opacity: 0, y: -8 }}
                 className="flex items-start gap-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm px-4 py-3 rounded-xl mb-6"
               >
-                <div className="w-5 h-5 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-5 h-5 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                   <span className="text-xs font-bold text-red-600 dark:text-red-400">!</span>
                 </div>
                 <span>{error}</span>
@@ -125,7 +125,7 @@ export default function LoginPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
                 <input
                   type="email"
                   value={email}
@@ -141,7 +141,7 @@ export default function LoginPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
@@ -155,7 +155,7 @@ export default function LoginPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer p-0.5"
                 >
-                  {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                  {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
                 </button>
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-950 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-primary-500/25 flex items-center justify-center gap-2 mt-2"
+              className="w-full bg-linear-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-950 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-primary-500/25 flex items-center justify-center gap-2 mt-2"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

@@ -58,13 +58,13 @@ export default function PaymentCash({ total, onPaymentSuccess, onError }) {
             exit={{ opacity: 0, y: -4 }}
             className="flex items-center gap-2 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-xs px-3 py-2.5 rounded-lg border border-red-100 dark:border-red-900"
           >
-            <span className="w-4 h-4 bg-red-100 dark:bg-red-900/60 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0">!</span>
+            <span className="w-4 h-4 bg-red-100 dark:bg-red-900/60 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0">!</span>
             {errorMsg}
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="bg-gradient-to-br from-primary-50 to-primary-100/50 dark:from-primary-900/30 dark:to-primary-800/20 rounded-2xl p-5 text-center">
+      <div className="bg-linear-to-br from-primary-50 to-primary-100/50 dark:from-primary-900/30 dark:to-primary-800/20 rounded-2xl p-5 text-center">
         <p className="text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-1">Total Tagihan</p>
         <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 tabular-nums">{formatCurrency(total)}</p>
       </div>
@@ -115,7 +115,7 @@ export default function PaymentCash({ total, onPaymentSuccess, onError }) {
       <button
         type="submit"
         disabled={parseFloat(cashPaid) < total || !cashPaid}
-        className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 active:shadow-md disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
+        className="w-full bg-linear-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 active:shadow-md disabled:opacity-50 disabled:cursor-not-allowed text-sm cursor-pointer"
       >
         Selesaikan Pembayaran
       </button>

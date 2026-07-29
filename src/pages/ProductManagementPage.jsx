@@ -106,7 +106,7 @@ export default function ProductManagementPage() {
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg shadow-primary-500/25 cursor-pointer"
+          className="inline-flex items-center gap-2 bg-linear-to-r from-primary-600 to-primary-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg shadow-primary-500/25 cursor-pointer"
         >
           <Plus className="w-4.5 h-4.5" />
           Tambah Menu Baru
@@ -129,7 +129,7 @@ export default function ProductManagementPage() {
 
         {/* Filter Warung (Admin Only) */}
         {isAdmin && (
-          <div className="relative min-w-[200px]">
+          <div className="relative min-w-50">
             <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <select
               value={selectedWarung}
@@ -189,7 +189,7 @@ export default function ProductManagementPage() {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-8 h-8 bg-linear-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 rounded-lg flex items-center justify-center shrink-0">
                           <Package className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                         </div>
                         <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{product.name}</span>
