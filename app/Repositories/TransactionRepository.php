@@ -57,21 +57,28 @@ class TransactionRepository implements TransactionRepositoryInterface
 
         $users = \App\Models\User::where('role', 'kasir')->orderBy('id', 'asc')->get();
 
-        $breakdown = [];
+        $warungMap = [];
         foreach ($users as $user) {
-            $userStat = $userRevenues->get($user->id);
             $warungName = $user->warung_name ?: ($user->name ?: 'Warung #' . $user->id);
+            $userStat = $userRevenues->get($user->id);
+            $revenue = $userStat ? (float) $userStat->revenue : 0.0;
+            $txCount = $userStat ? (int) $userStat->tx_count : 0;
 
-            $breakdown[] = [
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'warung_name' => $warungName,
-                'revenue' => $userStat ? (float) $userStat->revenue : 0.0,
-                'tx_count' => $userStat ? (int) $userStat->tx_count : 0,
-            ];
+            if (!isset($warungMap[$warungName])) {
+                $warungMap[$warungName] = [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'warung_name' => $warungName,
+                    'revenue' => $revenue,
+                    'tx_count' => $txCount,
+                ];
+            } else {
+                $warungMap[$warungName]['revenue'] += $revenue;
+                $warungMap[$warungName]['tx_count'] += $txCount;
+            }
         }
 
-        return $breakdown;
+        return array_values($warungMap);
     }
 
     public function getDailyRevenueHistory(int $days = 7): array

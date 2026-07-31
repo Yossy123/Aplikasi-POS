@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class UserSeeder extends Seeder
             ['email' => 'admin@simplepos.com'],
             [
                 'name' => 'Administrator',
-                'password' => 'password',
+                'password' => Hash::make('password'),
                 'role' => UserRole::ADMIN,
                 'warung_name' => null,
             ]
@@ -32,7 +33,7 @@ class UserSeeder extends Seeder
                 ['email' => $w['email']],
                 [
                     'name' => $w['name'],
-                    'password' => 'password',
+                    'password' => Hash::make('password'),
                     'role' => UserRole::KASIR,
                     'warung_name' => $w['warung'],
                 ]

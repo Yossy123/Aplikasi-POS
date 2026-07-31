@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/transactions/daily-revenue', [TransactionController::class, 'dailyRevenue']);
 
         // User Management (Admin only)
+        Route::get('/warungs', [UserController::class, 'warungs']);
         Route::get('/users', [UserController::class, 'index']);
         Route::post('/users', [UserController::class, 'store']);
         Route::get('/users/{id}', [UserController::class, 'show']);

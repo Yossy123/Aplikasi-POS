@@ -45,7 +45,7 @@
                 </tr>
                 <tr>
                     <td class="label">Waktu Pengajuan</td>
-                    <td class="value">{{ $cancellation->created_at->format('d M Y H:i:s') }}</td>
+                    <td class="value">{{ optional($cancellation->created_at)->format('d M Y H:i:s') ?? now()->format('d M Y H:i:s') }}</td>
                 </tr>
             </table>
 

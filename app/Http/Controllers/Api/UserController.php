@@ -56,4 +56,24 @@ class UserController extends Controller
             'message' => 'User deleted successfully.',
         ]);
     }
+
+    public function warungs()
+    {
+        $userWarungs = \App\Models\User::where('role', 'kasir')
+            ->whereNotNull('warung_name')
+            ->where('warung_name', '!=', '')
+            ->pluck('warung_name');
+
+        $productWarungs = \App\Models\Product::whereNotNull('warung_name')
+            ->where('warung_name', '!=', '')
+            ->pluck('warung_name');
+
+        $warungs = $userWarungs->concat($productWarungs)
+            ->unique()
+            ->values();
+
+        return response()->json([
+            'data' => $warungs,
+        ]);
+    }
 }

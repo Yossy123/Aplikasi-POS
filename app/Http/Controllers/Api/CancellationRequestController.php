@@ -31,6 +31,8 @@ class CancellationRequestController extends Controller
 
         $cancellation->load('user:id,name,warung_name');
 
+        $emailNotification = ['sent' => false];
+
         // Send email notification to all Admin users
         try {
             $adminEmails = \App\Models\User::where('role', \App\Enums\UserRole::ADMIN->value)
@@ -38,7 +40,7 @@ class CancellationRequestController extends Controller
                 ->filter()
                 ->toArray();
 
-            $mailUser = config('mail.from.address') ?: env('MAIL_USERNAME');
+            $mailUser = config('mail.from.address') ?: config('mail.mailers.smtp.username');
             if ($mailUser && !in_array($mailUser, $adminEmails)) {
                 $adminEmails[] = $mailUser;
             }
@@ -46,14 +48,22 @@ class CancellationRequestController extends Controller
             if (!empty($adminEmails)) {
                 \Illuminate\Support\Facades\Mail::to($adminEmails)
                     ->send(new \App\Mail\CancellationRequestedMail($cancellation));
+                $emailNotification = ['sent' => true];
+            } else {
+                $emailNotification = ['sent' => false, 'error' => 'Tidak ada email admin penerima.'];
             }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('Gagal mengirim email notifikasi pembatalan: ' . $e->getMessage());
+            $emailNotification = [
+                'sent' => false,
+                'error' => $e->getMessage(),
+            ];
         }
 
         return response()->json([
             'message' => 'Permintaan pembatalan diajukan, menunggu persetujuan Admin.',
             'data' => $cancellation,
+            'email_notification' => $emailNotification,
         ], 201);
     }
 
@@ -95,7 +105,33 @@ class CancellationRequestController extends Controller
     public function approve($id)
     {
         $cancellation = CancellationRequest::findOrFail($id);
-        $cancellation->update(['status' => 'approved']);
+
+        if ($cancellation->status !== 'pending') {
+            return response()->json([
+                'message' => 'Status request sudah berubah.',
+            ], 422);
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($cancellation) {
+            if ($cancellation->type === 'cancel_transaction' && !empty($cancellation->details)) {
+                $invoiceNumber = null;
+                if (preg_match('/(INV-[A-Za-z0-9\-]+)/i', $cancellation->details, $matches)) {
+                    $invoiceNumber = $matches[1];
+                } else {
+                    $invoiceNumber = trim($cancellation->details);
+                }
+
+                if ($invoiceNumber) {
+                    $transaction = \App\Models\Transaction::where('invoice_number', $invoiceNumber)->first();
+                    if ($transaction) {
+                        \App\Models\TransactionDetail::where('transaction_id', $transaction->id)->delete();
+                        $transaction->delete();
+                    }
+                }
+            }
+
+            $cancellation->update(['status' => 'approved']);
+        });
 
         return response()->json([
             'message' => 'Permintaan pembatalan disetujui.',
@@ -109,6 +145,13 @@ class CancellationRequestController extends Controller
     public function reject($id)
     {
         $cancellation = CancellationRequest::findOrFail($id);
+
+        if ($cancellation->status !== 'pending') {
+            return response()->json([
+                'message' => 'Status request sudah berubah.',
+            ], 422);
+        }
+
         $cancellation->update(['status' => 'rejected']);
 
         return response()->json([

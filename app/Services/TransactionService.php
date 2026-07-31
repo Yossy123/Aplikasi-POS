@@ -57,7 +57,11 @@ class TransactionService
         $productIds = array_column($items, 'product_id');
         $products = Product::whereIn('id', $productIds)->lockForUpdate()->get()->keyBy('id');
 
-        // Calculate totals and validate item existence
+        // Calculate totals and validate item existence & warung ownership
+        $user = auth()->user();
+        $userWarung = $user?->warung_name;
+        $isKasir = $user && ($user->role === \App\Enums\UserRole::KASIR || $user->role === 'kasir' || (method_exists($user, 'isKasir') && $user->isKasir()));
+
         $lineItems = [];
         foreach ($items as $item) {
             $product = $products->get($item['product_id']);
@@ -65,6 +69,12 @@ class TransactionService
             if (!$product) {
                 throw ValidationException::withMessages([
                     'items' => ["Product with ID {$item['product_id']} not found."],
+                ]);
+            }
+
+            if ($isKasir && !empty($userWarung) && $product->warung_name !== $userWarung) {
+                throw ValidationException::withMessages([
+                    'items' => ["Produk '{$product->name}' bukan milik warung {$userWarung}."],
                 ]);
             }
 
@@ -116,17 +126,11 @@ class TransactionService
         $date = now()->format('Ymd');
         $prefix = "INV-{$date}-";
 
-        $lastTransaction = \App\Models\Transaction::where('invoice_number', 'like', $prefix . '%')
-            ->orderBy('invoice_number', 'desc')
-            ->first();
+        do {
+            $random = strtoupper(\Illuminate\Support\Str::random(4));
+            $invoiceNumber = $prefix . $random;
+        } while (\App\Models\Transaction::where('invoice_number', $invoiceNumber)->exists());
 
-        if ($lastTransaction) {
-            $lastNumber = (int) substr($lastTransaction->invoice_number, -4);
-            $nextNumber = $lastNumber + 1;
-        } else {
-            $nextNumber = 1;
-        }
-
-        return $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        return $invoiceNumber;
     }
 }
