@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getProducts } from '../api/productApi';
+import { getProducts, getWarungs } from '../api/productApi';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import SearchBar from '../components/pos/SearchBar';
@@ -7,20 +7,11 @@ import ProductGrid from '../components/pos/ProductGrid';
 import CartPanel from '../components/pos/CartPanel';
 import CheckoutModal from '../components/checkout/CheckoutModal';
 import AddProductModal from '../components/product/AddProductModal';
-import AdminCancellationWidget from '../components/ui/AdminCancellationWidget';
 import { useAuth } from '../context/AuthContext';
 import { getTodayRevenue } from '../api/transactionApi';
 import { formatCurrency } from '../utils/formatCurrency';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, TrendingUp, DollarSign, Store, X, Building2, Plus, Filter } from 'lucide-react';
-
-const WARUNG_OPTIONS = [
-  { label: 'Semua Warung', value: '' },
-  { label: 'Soto Warung 1', value: 'Soto Warung 1' },
-  { label: 'Soto Warung 2', value: 'Soto Warung 2' },
-  { label: 'Jus Warung 3', value: 'Jus Warung 3' },
-  { label: 'Seblak Warung 4', value: 'Seblak Warung 4' },
-];
 
 export default function DashboardPage() {
   const { isAdmin, user } = useAuth();
@@ -28,6 +19,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedWarung, setSelectedWarung] = useState('');
+  const [warungOptions, setWarungOptions] = useState([{ label: 'Semua Warung', value: '' }]);
   const [showCart, setShowCart] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showAddMenuModal, setShowAddMenuModal] = useState(false);
@@ -36,6 +28,17 @@ export default function DashboardPage() {
   const [showWarungModal, setShowWarungModal] = useState(false);
   const { addItem, totalItems } = useCart();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    if (isAdmin) {
+      getWarungs()
+        .then((res) => {
+          const options = (res.data.data || []).map((w) => ({ label: w, value: w }));
+          setWarungOptions([{ label: 'Semua Warung', value: '' }, ...options]);
+        })
+        .catch(() => {});
+    }
+  }, [isAdmin]);
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -132,7 +135,6 @@ export default function DashboardPage() {
               {/* Admin Widgets - Desktop */}
               {isAdmin && (
                 <div className="hidden lg:flex items-center gap-3 self-start sm:self-center">
-                  <AdminCancellationWidget />
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -170,7 +172,7 @@ export default function DashboardPage() {
                     onChange={(e) => setSelectedWarung(e.target.value)}
                     className="w-full pl-9 pr-7 py-2 bg-gray-50/80 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-900 dark:text-gray-100 cursor-pointer"
                   >
-                    {WARUNG_OPTIONS.map((w) => (
+                    {warungOptions.map((w) => (
                       <option key={w.value} value={w.value}>
                         {w.label}
                       </option>
@@ -302,7 +304,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="text-sm font-bold text-gray-900 dark:text-gray-100">{item.warung_name}</p>
-                          <p className="text-[11px] text-gray-400">{item.transaction_count} transaksi</p>
+                          <p className="text-[11px] text-gray-400">{(item.tx_count ?? item.transaction_count) || 0} transaksi</p>
                         </div>
                       </div>
                       <div className="text-right">

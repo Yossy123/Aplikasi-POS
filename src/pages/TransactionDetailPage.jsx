@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { getTransaction } from '../api/transactionApi';
 import { formatCurrency } from '../utils/formatCurrency';
+import { escapeHtml } from '../utils/escapeHtml';
+import { STORE_CONFIG } from '../utils/storeConfig';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import Receipt from '../components/receipt/Receipt';
@@ -47,14 +48,14 @@ export default function TransactionDetailPage() {
     });
     const itemRows = (tx.details || []).map(item => `
       <tr>
-        <td style="padding:4px 0;font-size:12px;">${item.product?.name || 'Produk'}</td>
+        <td style="padding:4px 0;font-size:12px;">${escapeHtml(item.product?.name || 'Produk')}</td>
         <td style="text-align:center;padding:4px 8px;font-size:12px;">${item.qty}</td>
         <td style="text-align:right;padding:4px 0;font-size:12px;">Rp ${Number(item.price).toLocaleString('id-ID')}</td>
         <td style="text-align:right;padding:4px 0;font-size:12px;">Rp ${Number(item.subtotal).toLocaleString('id-ID')}</td>
       </tr>
     `).join('');
     printWindow.document.write(`
-      <html><head><title>Struk - ${tx.invoice_number}</title>
+      <html><head><title>Struk - ${escapeHtml(tx.invoice_number)}</title>
       <style>
         @page{margin:0;size:80mm auto;}
         body{font-family:'Courier New',monospace;font-size:12px;margin:0;padding:10px;color:#1e293b;}
@@ -71,25 +72,25 @@ export default function TransactionDetailPage() {
         .footer{text-align:center;margin-top:10px;font-size:10px;color:#666;}
       </style></head><body>
       <div class="receipt">
-        <div class="header"><h2>SIMPLE POS SHOP</h2><p>Jl. Jenderal Sudirman No. 123</p><p>Telp: 021-98765432</p></div>
+        <div class="header"><h2>${escapeHtml(STORE_CONFIG.name)}</h2><p>${escapeHtml(STORE_CONFIG.address)}</p><p>${escapeHtml(STORE_CONFIG.phone)}</p></div>
         <hr>
         <div class="meta">
-          <div><span>No. Invoice:</span><span>${tx.invoice_number}</span></div>
+          <div><span>No. Invoice:</span><span>${escapeHtml(tx.invoice_number)}</span></div>
           <div><span>Tanggal:</span><span>${formatDate(tx.created_at)}</span></div>
-          <div><span>Kasir:</span><span>${tx.user?.name || 'Kasir'}</span></div>
+          <div><span>Kasir:</span><span>${escapeHtml(tx.user?.name || 'Kasir')}</span></div>
         </div>
         <hr>
         <table><thead><tr><th>Item</th><th style="text-align:center;">Qty</th><th style="text-align:right;">Harga</th><th style="text-align:right;">Subtotal</th></tr></thead><tbody>${itemRows}</tbody></table>
         <hr>
         <div class="total"><span>TOTAL</span><span>Rp ${Number(tx.total_price).toLocaleString('id-ID')}</span></div>
         <div class="meta">
-          <div><span>Metode Bayar:</span><span style="text-transform:uppercase;font-weight:600;">${tx.payment_method}</span></div>
+          <div><span>Metode Bayar:</span><span style="text-transform:uppercase;font-weight:600;">${escapeHtml(tx.payment_method)}</span></div>
           ${tx.payment_method === 'cash' ? `<div><span>Bayar (Tunai):</span><span>Rp ${Number(tx.cash_paid).toLocaleString('id-ID')}</span></div><div><span>Kembalian:</span><span style="color:#059669;">Rp ${Number(tx.change).toLocaleString('id-ID')}</span></div>` : ''}
         </div>
         <hr>
         <div class="footer"><p>Terima Kasih Atas Kunjungan Anda</p><p>Barang yang sudah dibeli</p><p>tidak dapat ditukar/dikembalikan</p></div>
       </div>
-      <script>window.onload=function(){window.print();window.close();}<\/script>
+      <script>window.onload=function(){window.print();window.close();}</script>
       </body></html>
     `);
     printWindow.document.close();

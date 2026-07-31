@@ -1,40 +1,48 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createProduct, updateProduct } from '../../api/productApi';
+import { createProduct, updateProduct, getWarungs } from '../../api/productApi';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
 import { X, Tag, DollarSign, Plus, Edit3, Utensils, Store } from 'lucide-react';
-
-const WARUNG_OPTIONS = [
-  'Soto Warung 1',
-  'Soto Warung 2',
-  'Jus Warung 3',
-  'Seblak Warung 4',
-];
 
 export default function AddProductModal({ isOpen, onClose, onSuccess, initialData = null }) {
   const { user } = useAuth();
   const isKasir = user?.role === 'kasir';
   const kasirWarung = user?.warung_name;
+  const [warungOptions, setWarungOptions] = useState([]);
 
   const [form, setForm] = useState({
     name: initialData?.name || '',
     price: initialData?.price ? String(initialData.price) : '',
-    warung_name: initialData?.warung_name || (isKasir ? kasirWarung : WARUNG_OPTIONS[0]),
+    warung_name: initialData?.warung_name || (isKasir ? kasirWarung : ''),
   });
+
+  useEffect(() => {
+    if (isOpen && !isKasir) {
+      getWarungs()
+        .then((res) => {
+          const options = res.data.data || [];
+          setWarungOptions(options);
+          if (!initialData && options.length > 0 && !form.warung_name) {
+            setForm((prev) => ({ ...prev, warung_name: options[0] }));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [isOpen, isKasir, initialData]);
 
   useEffect(() => {
     if (initialData) {
       setForm({
         name: initialData.name || '',
         price: initialData.price ? String(initialData.price) : '',
-        warung_name: initialData.warung_name || (isKasir ? kasirWarung : WARUNG_OPTIONS[0]),
+        warung_name: initialData.warung_name || (isKasir ? kasirWarung : warungOptions[0] || ''),
       });
     } else {
       setForm({
         name: '',
         price: '',
-        warung_name: isKasir ? kasirWarung : WARUNG_OPTIONS[0],
+        warung_name: isKasir ? kasirWarung : warungOptions[0] || '',
       });
     }
   }, [initialData, isOpen, isKasir, kasirWarung]);
@@ -160,7 +168,7 @@ export default function AddProductModal({ isOpen, onClose, onSuccess, initialDat
                     className={inputClass('warung_name')}
                     required
                   >
-                    {WARUNG_OPTIONS.map((w) => (
+                    {warungOptions.map((w) => (
                       <option key={w} value={w}>
                         {w}
                       </option>

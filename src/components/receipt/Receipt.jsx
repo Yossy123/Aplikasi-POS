@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { STORE_CONFIG } from '../../utils/storeConfig';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useToast } from '../../context/ToastContext';
@@ -70,9 +71,9 @@ export default function Receipt({ transaction }) {
       >
         {/* Store Header */}
         <div className="text-center space-y-1 mb-4">
-          <h2 className="text-base font-bold tracking-tight text-gray-900">SIMPLE POS SHOP</h2>
-          <p className="text-[10px] text-gray-400">Jl. Jenderal Sudirman No. 123</p>
-          <p className="text-[10px] text-gray-400">Telp: 021-98765432</p>
+          <h2 className="text-base font-bold tracking-tight text-gray-900">{STORE_CONFIG.name}</h2>
+          <p className="text-[10px] text-gray-400">{STORE_CONFIG.address}</p>
+          <p className="text-[10px] text-gray-400">{STORE_CONFIG.phone}</p>
         </div>
 
         {/* Divider */}

@@ -1,20 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getProducts, deleteProduct } from '../api/productApi';
-import { formatCurrency } from '../utils/formatCurrency';
-import { useToast } from '../context/ToastContext';
-import { useAuth } from '../context/AuthContext';
-import ConfirmModal from '../components/ui/ConfirmModal';
-import AddProductModal from '../components/product/AddProductModal';
-import { Package, Search, Plus, Edit3, Trash2, Store, Filter } from 'lucide-react';
-
-const WARUNG_OPTIONS = [
-  { label: 'Semua Warung', value: '' },
-  { label: 'Soto Warung 1', value: 'Soto Warung 1' },
-  { label: 'Soto Warung 2', value: 'Soto Warung 2' },
-  { label: 'Jus Warung 3', value: 'Jus Warung 3' },
-  { label: 'Seblak Warung 4', value: 'Seblak Warung 4' },
-];
+import { getProducts, deleteProduct, getWarungs } from '../api/productApi';
 
 export default function ProductManagementPage() {
   const { isAdmin, user } = useAuth();
@@ -22,6 +8,7 @@ export default function ProductManagementPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedWarung, setSelectedWarung] = useState('');
+  const [warungOptions, setWarungOptions] = useState([{ label: 'Semua Warung', value: '' }]);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [page, setPage] = useState(1);
@@ -30,6 +17,17 @@ export default function ProductManagementPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const { showToast } = useToast();
+
+  useEffect(() => {
+    if (isAdmin) {
+      getWarungs()
+        .then((res) => {
+          const options = (res.data.data || []).map((w) => ({ label: w, value: w }));
+          setWarungOptions([{ label: 'Semua Warung', value: '' }, ...options]);
+        })
+        .catch(() => {});
+    }
+  }, [isAdmin]);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -139,7 +137,7 @@ export default function ProductManagementPage() {
               }}
               className="w-full pl-10 pr-8 py-2.5 bg-gray-50/80 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-900 dark:text-gray-100 cursor-pointer"
             >
-              {WARUNG_OPTIONS.map((w) => (
+              {warungOptions.map((w) => (
                 <option key={w.value} value={w.value}>
                   {w.label}
                 </option>

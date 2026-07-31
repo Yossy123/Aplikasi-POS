@@ -59,17 +59,21 @@ export default function PaymentQRIS({ total, onPaymentSuccess }) {
 
       {/* Timer */}
       <div className="text-xs text-gray-500 dark:text-gray-400 flex justify-center items-center gap-1.5">
-        <Clock className="w-3.5 h-3.5 text-amber-500" />
-        <span>
-          Menunggu pembayaran... Kadaluarsa dalam{' '}
-          <strong className="text-gray-700 dark:text-gray-200 font-mono">{formatTime(countdown)}</strong>
-        </span>
+        <Clock className={`w-3.5 h-3.5 ${countdown === 0 ? 'text-red-500' : 'text-amber-500'}`} />
+        {countdown === 0 ? (
+          <span className="text-red-500 font-semibold">Kode QR kadaluarsa, buat transaksi baru</span>
+        ) : (
+          <span>
+            Menunggu pembayaran... Kadaluarsa dalam{' '}
+            <strong className="text-gray-700 dark:text-gray-200 font-mono">{formatTime(countdown)}</strong>
+          </span>
+        )}
       </div>
 
       {/* Confirm Payment Button */}
       <button
         onClick={handleConfirmPayment}
-        disabled={confirming}
+        disabled={confirming || countdown === 0}
         className="w-full bg-linear-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 disabled:opacity-50 text-sm cursor-pointer flex items-center justify-center gap-2"
       >
         {confirming ? (
@@ -77,6 +81,8 @@ export default function PaymentQRIS({ total, onPaymentSuccess }) {
             <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
             Memproses Pembayaran...
           </>
+        ) : countdown === 0 ? (
+          <span>Kode QR Kadaluarsa</span>
         ) : (
           <>
             <CheckCircle2 className="w-4 h-4" />
