@@ -1,6 +1,13 @@
+
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { getProducts, deleteProduct, getWarungs } from '../api/productApi';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import { formatCurrency } from '../utils/formatCurrency';
+import AddProductModal from '../components/product/AddProductModal';
+import ConfirmModal from '../components/ui/ConfirmModal';
+import { Plus, Search, Filter, Package, Store, Edit3, Trash2 } from 'lucide-react';
 
 export default function ProductManagementPage() {
   const { isAdmin, user } = useAuth();
@@ -25,7 +32,7 @@ export default function ProductManagementPage() {
           const options = (res.data.data || []).map((w) => ({ label: w, value: w }));
           setWarungOptions([{ label: 'Semua Warung', value: '' }, ...options]);
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [isAdmin]);
 

@@ -66,7 +66,7 @@ export default function Receipt({ transaction }) {
       {/* Receipt Canvas */}
       <div
         ref={receiptRef}
-        className="bg-white p-6 rounded-xl border border-gray-100 max-w-[360px] mx-auto text-gray-800 font-mono text-xs shadow-xs receipt-printable"
+        className="bg-white p-6 rounded-xl border border-gray-100 max-w-90 mx-auto text-gray-800 font-mono text-xs shadow-xs receipt-printable"
         style={{ color: '#1e293b' }}
       >
         {/* Store Header */}
@@ -103,7 +103,7 @@ export default function Receipt({ transaction }) {
           {details.map((item) => (
             <div key={item.id} className="space-y-0.5">
               <div className="flex justify-between font-medium text-gray-900">
-                <span className="max-w-[200px] truncate">{item.product?.name || 'Produk'}</span>
+                <span className="max-w-50 truncate">{item.product?.name || 'Produk'}</span>
                 <span>{formatCurrency(item.subtotal)}</span>
               </div>
               <div className="flex justify-between text-[10px] text-gray-400">
@@ -154,7 +154,7 @@ export default function Receipt({ transaction }) {
       </div>
 
       {/* Control Buttons (hidden when printing) */}
-      <div className="flex gap-2 max-w-[360px] mx-auto print:hidden">
+      <div className="flex gap-2 max-w-90 mx-auto print:hidden">
         <button
           onClick={handlePrint}
           className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold border border-gray-200 rounded-xl text-xs transition-colors cursor-pointer"

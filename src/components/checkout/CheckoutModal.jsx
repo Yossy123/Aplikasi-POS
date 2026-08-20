@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { createTransaction } from '../../api/transactionApi';
 import PaymentCash from './PaymentCash';
 import PaymentQRIS from './PaymentQRIS';
 import Receipt from '../receipt/Receipt';
-import AdminApprovalModal from '../ui/AdminApprovalModal';
 import { useAuth } from '../../context/AuthContext';
 import { X, Banknote, QrCode, CheckCircle, Printer } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatCurrency';
 import { escapeHtml } from '../../utils/escapeHtml';
 import { STORE_CONFIG } from '../../utils/storeConfig';
 
@@ -19,16 +17,13 @@ export default function CheckoutModal({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [createdTransaction, setCreatedTransaction] = useState(null);
-  const [showApprovalModal, setShowApprovalModal] = useState(false);
 
   const handleCancelClick = () => {
     if (createdTransaction) {
       handleFinish();
-    } else if (isAdmin) {
+    } else {
       clearCart();
       onClose();
-    } else {
-      setShowApprovalModal(true);
     }
   };
 
@@ -146,7 +141,7 @@ export default function CheckoutModal({ onClose, onSuccess }) {
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-2 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl border border-red-100 dark:border-red-900 mb-4"
             >
-              <span className="w-5 h-5 bg-red-100 dark:bg-red-900/60 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">!</span>
+              <span className="w-5 h-5 bg-red-100 dark:bg-red-900/60 rounded-full flex items-center justify-center text-xs font-bold shrink-0">!</span>
               {errorMsg}
             </motion.div>
           )}
@@ -187,7 +182,7 @@ export default function CheckoutModal({ onClose, onSuccess }) {
                 </button>
                 <button
                   onClick={handleFinish}
-                  className="flex-[2] bg-primary-600 text-white py-3 px-4 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors cursor-pointer"
+                  className="flex-2 bg-primary-600 text-white py-3 px-4 rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors cursor-pointer"
                 >
                   Transaksi Baru
                 </button>
@@ -201,7 +196,7 @@ export default function CheckoutModal({ onClose, onSuccess }) {
                 onClick={() => setPaymentMethod('cash')}
                 className="flex flex-col items-center justify-center p-8 border-2 border-gray-100 dark:border-gray-800 hover:border-emerald-400 dark:hover:border-emerald-600 hover:bg-emerald-50/20 dark:hover:bg-emerald-900/20 rounded-2xl transition-all duration-200 group cursor-pointer"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/40 dark:to-emerald-800/40 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-linear-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/40 dark:to-emerald-800/40 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Banknote className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <span className="font-bold text-gray-900 dark:text-gray-100 text-sm">Tunai</span>
@@ -214,7 +209,7 @@ export default function CheckoutModal({ onClose, onSuccess }) {
                 onClick={() => setPaymentMethod('qris')}
                 className="flex flex-col items-center justify-center p-8 border-2 border-gray-100 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600 hover:bg-blue-50/20 dark:hover:bg-blue-900/20 rounded-2xl transition-all duration-200 group cursor-pointer"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <QrCode className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 </div>
                 <span className="font-bold text-gray-900 dark:text-gray-100 text-sm">QRIS</span>
@@ -242,19 +237,6 @@ export default function CheckoutModal({ onClose, onSuccess }) {
           )}
         </div>
       </motion.div>
-
-      {/* Admin Approval Modal for Checkout Cancellation */}
-      <AdminApprovalModal
-        isOpen={showApprovalModal}
-        onClose={() => setShowApprovalModal(false)}
-        onApproved={() => {
-          setShowApprovalModal(false);
-          onClose();
-        }}
-        type="cancel_checkout"
-        title="Konfirmasi Pembatalan Checkout"
-        message="Membatalkan proses pembayaran / checkout oleh Kasir memerlukan konfirmasi dan persetujuan Admin."
-      />
     </motion.div>
   );
 }

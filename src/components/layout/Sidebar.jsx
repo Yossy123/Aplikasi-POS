@@ -1,4 +1,3 @@
-import AdminCancellationWidget from '../ui/AdminCancellationWidget';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { logout as logoutApi } from '../../api/authApi';
@@ -136,13 +135,6 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* User & Logout */}
         <div className="p-3 border-t border-gray-100 dark:border-gray-800 space-y-2">
-          {/* Supervisor OTP for Admin */}
-          {isAdmin && (
-            <div className="px-1">
-              <AdminCancellationWidget />
-            </div>
-          )}
-
           {/* User info */}
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
             <div className="w-9 h-9 bg-linear-to-br from-primary-100 to-primary-50 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center shrink-0">

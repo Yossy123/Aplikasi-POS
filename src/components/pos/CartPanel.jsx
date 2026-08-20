@@ -1,48 +1,25 @@
-import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
 import { formatCurrency } from '../../utils/formatCurrency';
 import CartItem from './CartItem';
-import AdminApprovalModal from '../ui/AdminApprovalModal';
 import { ShoppingBag, RotateCcw } from 'lucide-react';
 
 export default function CartPanel({ onCheckout }) {
-  const { isAdmin } = useAuth();
   const { items, totalPrice, totalItems, updateQty, removeItem, clearCart } = useCart();
-  const [pendingAction, setPendingAction] = useState(null);
 
   const handleClearCartClick = () => {
-    if (isAdmin) {
-      clearCart();
-    } else {
-      setPendingAction({ type: 'clear' });
-    }
+    clearCart();
   };
 
-  const handleRemoveItemClick = (productId, itemName = 'Item') => {
-    if (isAdmin) {
-      removeItem(productId);
-    } else {
-      setPendingAction({ type: 'remove', productId, itemName });
-    }
+  const handleRemoveItemClick = (productId) => {
+    removeItem(productId);
   };
 
-  const handleUpdateQtyClick = (productId, newQty, itemName = 'Item') => {
+  const handleUpdateQtyClick = (productId, newQty) => {
     if (newQty <= 0) {
-      handleRemoveItemClick(productId, itemName);
+      handleRemoveItemClick(productId);
     } else {
       updateQty(productId, newQty);
     }
-  };
-
-  const handleApproved = () => {
-    if (!pendingAction) return;
-    if (pendingAction.type === 'clear') {
-      clearCart();
-    } else if (pendingAction.type === 'remove') {
-      removeItem(pendingAction.productId);
-    }
-    setPendingAction(null);
   };
 
   return (
@@ -88,8 +65,8 @@ export default function CartPanel({ onCheckout }) {
                 <CartItem
                   key={item.product_id}
                   item={item}
-                  onUpdateQty={(pid, qty) => handleUpdateQtyClick(pid, qty, item.name)}
-                  onRemove={(pid) => handleRemoveItemClick(pid, item.name)}
+                  onUpdateQty={handleUpdateQtyClick}
+                  onRemove={handleRemoveItemClick}
                 />
               ))}
             </div>
@@ -114,21 +91,6 @@ export default function CartPanel({ onCheckout }) {
           </div>
         )}
       </div>
-
-      {/* Admin Cancellation Approval Modal */}
-      <AdminApprovalModal
-        isOpen={!!pendingAction}
-        onClose={() => setPendingAction(null)}
-        onApproved={handleApproved}
-        type={pendingAction?.type === 'clear' ? 'clear_cart' : 'remove_item'}
-        details={pendingAction?.type === 'remove' ? pendingAction?.itemName : ''}
-        title="Konfirmasi Pembatalan Admin"
-        message={
-          pendingAction?.type === 'clear'
-            ? 'Pengosongan seluruh isi keranjang oleh Kasir memerlukan konfirmasi dan persetujuan Admin.'
-            : `Menghapus item "${pendingAction?.itemName || 'produk'}" dari keranjang oleh Kasir memerlukan konfirmasi dan persetujuan Admin.`
-        }
-      />
     </>
   );
 }
