@@ -95,7 +95,7 @@ export default function ProductManagementPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 animate-fade-in">
+    <div className="app-page">
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -111,7 +111,7 @@ export default function ProductManagementPage() {
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 bg-linear-to-r from-primary-600 to-primary-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg shadow-primary-500/25 cursor-pointer"
+          className="app-button inline-flex items-center gap-2 px-5 py-2.5 text-sm cursor-pointer"
         >
           <Plus className="w-4.5 h-4.5" />
           Tambah Menu Baru
@@ -119,7 +119,7 @@ export default function ProductManagementPage() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
+      <div className="app-panel flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6 p-3">
         {/* Search */}
         <div className="relative flex-1">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
@@ -128,7 +128,7 @@ export default function ProductManagementPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari nama menu..."
-            className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all hover:bg-white dark:hover:bg-gray-800 focus:bg-white dark:focus:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            className="app-input w-full pl-10 pr-4 py-2.5 text-sm outline-none hover:bg-white dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
           />
         </div>
 
@@ -142,7 +142,7 @@ export default function ProductManagementPage() {
                 setSelectedWarung(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-10 pr-8 py-2.5 bg-gray-50/80 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-900 dark:text-gray-100 cursor-pointer"
+              className="app-input w-full pl-10 pr-8 py-2.5 text-sm font-medium outline-none text-gray-900 dark:text-gray-100 cursor-pointer"
             >
               {warungOptions.map((w) => (
                 <option key={w.value} value={w.value}>
@@ -155,7 +155,7 @@ export default function ProductManagementPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div className="app-panel overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

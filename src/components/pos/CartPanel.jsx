@@ -24,13 +24,16 @@ export default function CartPanel({ onCheckout }) {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-900 border-l border-gray-100 dark:border-gray-800 h-full flex flex-col">
+      <div className="bg-white/90 dark:bg-gray-900 border-l border-gray-200/80 dark:border-gray-800 h-full flex flex-col shadow-[-12px_0_30px_-20px_rgba(15,23,42,0.25)]">
         {/* Header */}
-        <div className="px-4 py-4 border-b border-gray-100 dark:border-gray-800">
+        <div className="px-5 py-5 border-b border-gray-100 dark:border-gray-800 bg-linear-to-br from-primary-50/60 via-white to-emerald-50/40 dark:from-primary-950/20 dark:via-gray-900 dark:to-emerald-950/10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ShoppingBag className="w-4.5 h-4.5 text-gray-700 dark:text-gray-400" />
-              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">Keranjang</h3>
+              <div>
+                <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm">Keranjang</h3>
+                <p className="text-[10px] text-gray-400 mt-0.5">Pesanan aktif</p>
+              </div>
               {totalItems > 0 && (
                 <span className="bg-primary-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-5 text-center">
                   {totalItems}
@@ -50,7 +53,7 @@ export default function CartPanel({ onCheckout }) {
         </div>
 
         {/* Items */}
-        <div className="flex-1 overflow-y-auto px-4">
+        <div className="flex-1 overflow-y-auto px-5">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center py-12">
               <div className="w-14 h-14 bg-gray-50 dark:bg-gray-800 rounded-2xl flex items-center justify-center mb-3">
@@ -75,8 +78,8 @@ export default function CartPanel({ onCheckout }) {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-gray-100 dark:border-gray-800 p-4 space-y-3">
-            <div className="flex items-center justify-between">
+          <div className="border-t border-gray-100 dark:border-gray-800 p-5 space-y-3 bg-white/80 dark:bg-gray-900">
+            <div className="flex items-center justify-between bg-gray-50/80 dark:bg-gray-800/60 rounded-2xl px-3.5 py-3">
               <span className="text-sm text-gray-500 dark:text-gray-400">Total</span>
               <span className="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">
                 {formatCurrency(totalPrice)}
@@ -84,7 +87,7 @@ export default function CartPanel({ onCheckout }) {
             </div>
             <button
               onClick={onCheckout}
-              className="w-full bg-linear-to-r from-primary-600 to-primary-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg shadow-primary-500/25 active:shadow-md active:translate-y-0.5 text-sm cursor-pointer"
+              className="app-button w-full py-3.5 px-4 text-sm cursor-pointer"
             >
               Bayar — {formatCurrency(totalPrice)}
             </button>

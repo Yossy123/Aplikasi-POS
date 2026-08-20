@@ -25,9 +25,9 @@
 }
 
 :root {
-  --bg-surface: #f8fafb;
-  --border-color: #eef2f6;
-  --text-primary: #0f172a;
+  --bg-surface: #f5f7fb;
+  --border-color: #e7ebf3;
+  --text-primary: #172033;
 }
 
 .dark {
@@ -43,11 +43,25 @@
 body {
   font-family: var(--font-sans);
   background-color: var(--color-surface);
+  background-image: radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.08), transparent 28rem), radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.07), transparent 30rem);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+button, input, select { font: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid rgba(14, 165, 233, 0.45); outline-offset: 2px; }
+
+@layer components {
+  .app-page { @apply p-4; animation: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .app-panel { @apply bg-white/85 dark:bg-gray-900/85 border border-gray-200/70 dark:border-gray-800 rounded-3xl shadow-sm shadow-slate-200/60 dark:shadow-none; }
+  .app-input { @apply bg-white/80 dark:bg-gray-800/70 border border-gray-200 dark:border-gray-700 rounded-xl transition-all focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10; }
+  .app-button { @apply bg-linear-to-r from-primary-600 to-primary-700 text-white rounded-xl font-semibold shadow-lg shadow-primary-500/20 hover:from-primary-700 hover:to-primary-800 hover:-translate-y-px active:translate-y-0 transition-all; }
+}
+
+@media (min-width: 640px) { .app-page { padding: 1.5rem; } }
+@media (min-width: 1024px) { .app-page { padding: 2rem; } }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {

@@ -88,11 +88,11 @@ export default function DashboardPage() {
         {/* Left: Products */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100/80 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+          <div className="px-4 sm:px-6 py-5 border-b border-gray-200/70 dark:border-gray-800 bg-white/75 dark:bg-gray-900/75 backdrop-blur-xl">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
               <div className="flex items-center justify-between flex-1">
                 <div>
-                  <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+                  <h1 className="text-xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
                     Kasir POS
                     {!isAdmin && user?.warung_name && (
                       <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/50">
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                   )}
                   <button
                     onClick={() => setShowCart(!showCart)}
-                    className="relative p-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all shadow-xs"
+                    className="relative p-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-primary-50 dark:hover:bg-gray-700 hover:border-primary-300 dark:hover:border-primary-700 transition-all shadow-sm"
                   >
                     <ShoppingCart className="w-5 h-5" />
                     {totalItems > 0 && (
@@ -184,7 +184,7 @@ export default function DashboardPage() {
               {isAdmin && (
                 <button
                   onClick={() => setShowAddMenuModal(true)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-linear-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-xl text-xs font-semibold shadow-md shadow-primary-500/20 transition-all cursor-pointer shrink-0 justify-center"
+                  className="app-button flex items-center gap-1.5 px-3.5 py-2 text-xs cursor-pointer shrink-0 justify-center"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah Menu</span>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Product grid */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-linear-to-b from-transparent to-primary-50/20 dark:to-primary-950/10">
             <ProductGrid products={products} loading={loading} onAdd={addItem} />
           </div>
         </div>

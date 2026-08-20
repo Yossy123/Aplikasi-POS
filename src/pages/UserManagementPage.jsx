@@ -131,7 +131,7 @@ export default function UserManagementPage() {
     }`;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 animate-fade-in">
+    <div className="app-page">
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -163,7 +163,7 @@ export default function UserManagementPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div className="app-panel overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

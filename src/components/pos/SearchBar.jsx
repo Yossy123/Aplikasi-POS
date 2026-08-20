@@ -9,7 +9,7 @@ export default function SearchBar({ value, onChange, placeholder = 'Cari produk.
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-9 py-2.5 bg-gray-50/80 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500 hover:bg-white dark:hover:bg-gray-800 focus:bg-white dark:focus:bg-gray-800 text-gray-900 dark:text-gray-100"
+        className="app-input w-full pl-10 pr-9 py-2.5 text-sm outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 hover:bg-white dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm shadow-slate-200/50 dark:shadow-none"
       />
       {value && (
         <button

@@ -70,7 +70,7 @@ export default function AppLayout() {
             </div>
           </div>
         )}
-        <main>
+        <main className="relative">
           <Outlet />
         </main>
       </div>

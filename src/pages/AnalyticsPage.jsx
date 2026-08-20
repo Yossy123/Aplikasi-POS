@@ -102,7 +102,7 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 animate-fade-in">
+    <div className="app-page space-y-6">
       {/* Header & Filter Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="hidden lg:block">
@@ -136,7 +136,7 @@ export default function AnalyticsPage() {
       </div>
 
       {loading ? (
-        <div className="min-h-100 bg-white rounded-2xl border border-gray-100 flex items-center justify-center">
+        <div className="app-panel min-h-100 flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-500 border-t-transparent" />
             <p className="text-sm text-gray-500 font-medium">Memuat data analitik...</p>
@@ -147,7 +147,7 @@ export default function AnalyticsPage() {
           {/* Key Metrics Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Total Revenue */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs relative overflow-hidden group">
+            <div className="app-panel p-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-primary-500/5 rounded-bl-full group-hover:scale-110 transition-transform duration-300" />
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Pendapatan</span>
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Average Revenue */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs relative overflow-hidden group">
+            <div className="app-panel p-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-bl-full group-hover:scale-110 transition-transform duration-300" />
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Rata-rata Harian</span>
@@ -173,7 +173,7 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Total Transactions */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs relative overflow-hidden group">
+            <div className="app-panel p-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full group-hover:scale-110 transition-transform duration-300" />
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Transaksi</span>
@@ -186,7 +186,7 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Highest Sales Day */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-xs relative overflow-hidden group">
+            <div className="app-panel p-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full group-hover:scale-110 transition-transform duration-300" />
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Penjualan Tertinggi</span>
@@ -200,7 +200,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Multi-Warung Revenue Breakdown Section */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs space-y-4">
+          <div className="app-panel p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-950/60 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
@@ -243,7 +243,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Interactive Chart Section */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs">
+          <div className="app-panel p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-sm font-bold text-gray-900">Grafik Penjualan Harian</h3>
@@ -417,7 +417,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Daily Sales Breakdown Table */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden">
+          <div className="app-panel overflow-hidden">
             <div className="px-5 py-4 border-b border-gray-150">
               <h3 className="text-sm font-bold text-gray-900">Rincian Penjualan Harian</h3>
               <p className="text-xs text-gray-400 mt-0.5">Tabel riwayat pendapatan per hari selama periode berlangsung</p>

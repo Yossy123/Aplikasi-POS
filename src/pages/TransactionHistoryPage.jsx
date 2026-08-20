@@ -48,14 +48,14 @@ export default function TransactionHistoryPage() {
   const hasFilters = search || paymentMethod || dateFrom || dateTo;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 animate-fade-in">
+    <div className="app-page">
       <div className="mb-6 hidden lg:block">
         <h1 className="text-xl font-bold text-gray-900 tracking-tight">Riwayat Transaksi</h1>
         <p className="text-sm text-gray-500 mt-1">Daftar transaksi penjualan POS</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-6 shadow-xs space-y-4">
+      <div className="app-panel p-4 mb-6 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Cari Invoice</label>
@@ -98,7 +98,7 @@ export default function TransactionHistoryPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden">
+      <div className="app-panel overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

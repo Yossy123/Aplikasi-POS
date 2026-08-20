@@ -60,20 +60,20 @@ export default function Sidebar({ isOpen, onClose }) {
         variants={sidebarVariants}
         initial="closed"
         animate="open"
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 flex flex-col lg:translate-x-0 lg:fixed lg:z-40 ${
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-r border-gray-200/70 dark:border-gray-800 flex flex-col lg:translate-x-0 lg:fixed lg:z-40 shadow-xl shadow-slate-900/5 ${
           isOpen ? '' : 'hidden lg:flex'
         }`}
       >
         {/* Logo */}
-        <div className="px-5 py-5 border-b border-gray-100 dark:border-gray-800">
+        <div className="px-5 py-5 border-b border-gray-100 dark:border-gray-800 bg-linear-to-br from-primary-50/70 via-white to-emerald-50/40 dark:from-primary-950/40 dark:via-gray-900 dark:to-emerald-950/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-linear-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/25">
+              <div className="w-10 h-10 bg-linear-to-br from-primary-500 via-primary-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30 ring-4 ring-white/70 dark:ring-gray-900">
                 <ShoppingCart className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900 dark:text-gray-100 tracking-tight">SimplePOS</h1>
-                <p className="text-[10px] text-gray-400 -mt-0.5">Point of Sale</p>
+                <p className="text-[10px] text-primary-700/60 dark:text-primary-300/60 -mt-0.5 font-medium">Point of Sale</p>
               </div>
             </div>
             <button
@@ -87,7 +87,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Navigation */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 pb-2 pt-1">
+          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.16em] px-3 pb-2 pt-1">
             Menu Utama
           </div>
 
@@ -98,7 +98,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {isAdmin && (
             <>
-              <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 pb-2 pt-4">
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.16em] px-3 pb-2 pt-4">
                 Manajemen
               </div>
               <NavLink to="/products" className={linkClass} onClick={onClose}>
@@ -122,7 +122,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {isKasir && (
             <>
-              <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 pb-2 pt-4">
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.16em] px-3 pb-2 pt-4">
                 Riwayat
               </div>
               <NavLink to="/my-transactions" className={linkClass} onClick={onClose}>
@@ -136,7 +136,7 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* User & Logout */}
         <div className="p-3 border-t border-gray-100 dark:border-gray-800 space-y-2">
           {/* User info */}
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
+          <div className="flex items-center gap-3 px-3 py-3 rounded-2xl bg-linear-to-r from-gray-50 to-primary-50/40 dark:from-gray-800 dark:to-primary-950/20 border border-gray-100 dark:border-gray-800">
             <div className="w-9 h-9 bg-linear-to-br from-primary-100 to-primary-50 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center shrink-0">
               <User className="w-4.5 h-4.5 text-primary-600 dark:text-primary-400" />
             </div>
