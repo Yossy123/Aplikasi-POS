@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CancellationRequestController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
@@ -22,20 +21,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 
-    // Cancellation Requests (Kasir creates, views status)
-    Route::post('/cancellation-requests', [CancellationRequestController::class, 'store']);
-    Route::get('/cancellation-requests/{id}', [CancellationRequestController::class, 'show']);
-
     // Products (read for all authenticated users)
     Route::get('/products', [ProductController::class, 'index']);
 
     // Admin Routes
     Route::middleware(EnsureUserIsAdmin::class)->group(function () {
-        // Admin Cancellation Approvals
-        Route::get('/cancellation-requests', [CancellationRequestController::class, 'index']);
-        Route::post('/cancellation-requests/{id}/approve', [CancellationRequestController::class, 'approve']);
-        Route::post('/cancellation-requests/{id}/reject', [CancellationRequestController::class, 'reject']);
-
         // Products management
         Route::post('/products', [ProductController::class, 'store']);
         Route::put('/products/{id}', [ProductController::class, 'update']);
@@ -60,6 +50,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Transaction detail (accessible by admin and owner)
     Route::get('/transactions/{id}', [TransactionController::class, 'show']);
+
+    // Cancel / Delete transaction (accessible by admin and owner)
+    Route::delete('/transactions/{id}', [TransactionController::class, 'destroy']);
 
     // My own transactions (Kasir)
     Route::get('/my-transactions', [TransactionController::class, 'myTransactions']);

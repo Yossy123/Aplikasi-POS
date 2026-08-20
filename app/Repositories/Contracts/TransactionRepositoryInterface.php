@@ -7,6 +7,7 @@ interface TransactionRepositoryInterface
     public function all(array $filters = [], int $perPage = 15);
     public function find(int $id);
     public function create(array $data);
+    public function delete(int $id);
     public function getTodayRevenue(): float;
     public function getTodayRevenueByWarung(): array;
     public function getDailyRevenueHistory(int $days = 7): array;

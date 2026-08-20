@@ -59,6 +59,22 @@ class TransactionController extends Controller
         return new TransactionResource($transaction);
     }
 
+    public function destroy(int $id)
+    {
+        $transaction = $this->transactionService->find($id);
+
+        // Kasir can only cancel/delete their own transactions
+        if (!auth()->user()->isAdmin() && $transaction->user_id !== auth()->id()) {
+            abort(403, 'Forbidden.');
+        }
+
+        $this->transactionService->delete($id);
+
+        return response()->json([
+            'message' => 'Transaksi berhasil dibatalkan.'
+        ]);
+    }
+
     public function todayRevenue()
     {
         $revenue = $this->transactionService->getTodayRevenue();
