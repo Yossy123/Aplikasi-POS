@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['search', 'role']);
-        $perPage = $request->integer('per_page', 15);
+        $perPage = min($request->integer('per_page', 15), 100);
 
         $users = $this->userService->list($filters, $perPage);
 

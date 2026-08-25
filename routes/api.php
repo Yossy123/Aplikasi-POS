@@ -1,14 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CancellationRequestController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Support\Facades\Route;
 
-// Public routes
-Route::post('/login', [AuthController::class, 'login']);
+// Public routes (throttled to prevent brute force)
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
 // Health check (public)
 Route::get('/health-check', function () {
@@ -56,4 +57,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // My own transactions (Kasir)
     Route::get('/my-transactions', [TransactionController::class, 'myTransactions']);
+
+    // Cancellation requests
+    Route::get('/cancellation-requests', [CancellationRequestController::class, 'index'])
+        ->middleware(EnsureUserIsAdmin::class);
+    Route::post('/cancellation-requests', [CancellationRequestController::class, 'store']);
+    Route::get('/cancellation-requests/{id}', [CancellationRequestController::class, 'show']);
+
+    Route::middleware(EnsureUserIsAdmin::class)->group(function () {
+        Route::post('/cancellation-requests/{id}/approve', [CancellationRequestController::class, 'approve']);
+        Route::post('/cancellation-requests/{id}/reject', [CancellationRequestController::class, 'reject']);
+    });
 });

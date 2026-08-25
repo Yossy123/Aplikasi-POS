@@ -95,30 +95,42 @@ class TransactionService
         $handler->validate($paymentData);
         $paymentResult = $handler->process($paymentData);
 
-        // Execute transaction atomically
-        return DB::transaction(function () use ($paymentMethod, $totalPrice, $paymentResult, $lineItems) {
-            // Generate invoice number
-            $invoiceNumber = $this->generateInvoiceNumber();
+        // Execute transaction atomically, retrying on rare invoice number collisions
+        $maxAttempts = 3;
 
-            // Create transaction
-            $transaction = $this->transactionRepository->create([
-                'invoice_number' => $invoiceNumber,
-                'user_id' => auth()->id(),
-                'payment_method' => $paymentMethod->value,
-                'total_price' => $totalPrice,
-                'cash_paid' => $paymentResult['cash_paid'],
-                'change' => $paymentResult['change'],
-            ]);
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            try {
+                return DB::transaction(function () use ($paymentMethod, $totalPrice, $paymentResult, $lineItems) {
+                    // Create transaction
+                    $transaction = $this->transactionRepository->create([
+                        'invoice_number' => $this->generateInvoiceNumber(),
+                        'user_id' => auth()->id(),
+                        'payment_method' => $paymentMethod->value,
+                        'total_price' => $totalPrice,
+                        'cash_paid' => $paymentResult['cash_paid'],
+                        'change' => $paymentResult['change'],
+                    ]);
 
-            // Create line items
-            foreach ($lineItems as $lineItem) {
-                TransactionDetail::create(array_merge($lineItem, [
-                    'transaction_id' => $transaction->id,
-                ]));
+                    // Create line items
+                    foreach ($lineItems as $lineItem) {
+                        TransactionDetail::create(array_merge($lineItem, [
+                            'transaction_id' => $transaction->id,
+                        ]));
+                    }
+
+                    return $transaction->load(['user', 'details.product']);
+                });
+            } catch (\Illuminate\Database\QueryException $e) {
+                $isDuplicateEntry = ($e->errorInfo[1] ?? null) == 1062
+                    || str_contains($e->getMessage(), 'Duplicate entry');
+
+                if (!$isDuplicateEntry || $attempt === $maxAttempts) {
+                    throw $e;
+                }
             }
+        }
 
-            return $transaction->load(['user', 'details.product']);
-        });
+        throw new \RuntimeException('Failed to create transaction.');
     }
 
     protected function generateInvoiceNumber(): string
@@ -126,11 +138,6 @@ class TransactionService
         $date = now()->format('Ymd');
         $prefix = "INV-{$date}-";
 
-        do {
-            $random = strtoupper(\Illuminate\Support\Str::random(4));
-            $invoiceNumber = $prefix . $random;
-        } while (\App\Models\Transaction::where('invoice_number', $invoiceNumber)->exists());
-
-        return $invoiceNumber;
+        return $prefix . strtoupper(\Illuminate\Support\Str::random(4));
     }
 }

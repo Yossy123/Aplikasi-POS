@@ -40,6 +40,15 @@ class TransactionRepository implements TransactionRepositoryInterface
         return Transaction::create($data);
     }
 
+    public function delete(int $id): bool
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        \App\Models\TransactionDetail::where('transaction_id', $id)->delete();
+
+        return (bool) $transaction->delete();
+    }
+
     public function getTodayRevenue(): float
     {
         return (float) Transaction::whereDate('created_at', now()->toDateString())->sum('total_price');

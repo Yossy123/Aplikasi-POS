@@ -17,7 +17,7 @@ class TransactionController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['payment_method', 'date_from', 'date_to', 'search']);
-        $perPage = $request->integer('per_page', 15);
+        $perPage = min($request->integer('per_page', 15), 100);
 
         $transactions = $this->transactionService->list($filters, $perPage);
 

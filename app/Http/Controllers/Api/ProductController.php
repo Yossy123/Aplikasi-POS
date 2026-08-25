@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['search']);
-        $perPage = $request->integer('per_page', 20);
+        $perPage = min($request->integer('per_page', 20), 100);
 
         // Auto-filter by warung_name for kasir users
         $user = $request->user();
