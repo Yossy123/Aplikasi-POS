@@ -1,11 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getUser } from '../api/authApi';
+import { getToken, setToken, clearAuth } from '../utils/tokenStorage';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setTokenState] = useState(getToken());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,9 +17,8 @@ export function AuthProvider({ children }) {
           setLoading(false);
         })
         .catch(() => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setToken(null);
+          clearAuth();
+          setTokenState(null);
           setUser(null);
           setLoading(false);
         });
@@ -28,16 +28,14 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const loginAction = (userData, authToken) => {
-    localStorage.setItem('token', authToken);
-    localStorage.setItem('user', JSON.stringify(userData));
     setToken(authToken);
+    setTokenState(authToken);
     setUser(userData);
   };
 
   const logoutAction = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setToken(null);
+    clearAuth();
+    setTokenState(null);
     setUser(null);
   };
 

@@ -29,7 +29,13 @@ export default function UserManagementPage() {
     if (!formData.name.trim()) errors.name = 'Nama harus diisi.';
     if (!formData.email.trim() || !/^\S+@\S+\.\S+$/.test(formData.email)) errors.email = 'Email tidak valid.';
     if (!editingUser && !formData.password) errors.password = 'Password harus diisi.';
-    if (formData.password && formData.password.length < 6) errors.password = 'Password minimal 6 karakter.';
+    if (formData.password) {
+      if (formData.password.length < 8) {
+        errors.password = 'Password minimal 8 karakter.';
+      } else if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(formData.password)) {
+        errors.password = 'Password harus mengandung huruf dan angka.';
+      }
+    }
     return errors;
   };
 
@@ -337,7 +343,7 @@ export default function UserManagementPage() {
                     <KeyRound className="w-3.5 h-3.5 text-gray-400" />
                     {editingUser ? 'Password Baru (Kosongkan jika tidak diubah)' : 'Password'}
                   </label>
-                  <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} onBlur={() => handleBlur('password')} className={inputClass('password')} minLength={editingUser ? undefined : 6} required={!editingUser} />
+                  <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} onBlur={() => handleBlur('password')} className={inputClass('password')} minLength={editingUser ? undefined : 8} required={!editingUser} />
                   {touched.password && fieldErrors.password && <p className="mt-1 text-xs text-red-500">{fieldErrors.password}</p>}
                 </div>
                 <div>
